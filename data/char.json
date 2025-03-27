@@ -1,0 +1,161 @@
+// Chỉ số mặc định:
+/*
+    cultivation: Nhập môn,
+    hp: 100,
+    nội công: 0,
+    weapon: null,
+    armor: null
+*/
+
+[
+    {
+        "id": 0,
+        "name": "Lý Vô Song",
+        "desc": "Kiếm khách lạnh lùng đến từ Võ Đang.",
+        "atk": 85,
+        "faction": "Võ Đang",
+        "skill": [
+            { "name": "Thái Cực Kiếm", "ref": "vo_dang_sword" }
+        ]
+    },
+    {
+        "id": 1,
+        "name": "Trương Thanh Phong",
+        "desc": "Trưởng môn đời trước của Võ Đang.",
+        "atk": 90,
+        "faction": "Võ Đang",
+        "skill": [
+            { "name": "Vô Ảnh Kiếm", "ref": "vo_dang_shadow_sword" }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Diệp Hàn",
+        "desc": "Đệ tử xuất sắc của Thiếu Lâm Tự.",
+        "atk": 88,
+        "faction": "Thiếu Lâm",
+        "skill": [
+            { "name": "La Hán Chưởng", "ref": "shao_lin_palm" }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Hư Không Đại Sư",
+        "desc": "Trụ trì Thiếu Lâm, tinh thông Phật pháp.",
+        "atk": 92,
+        "faction": "Thiếu Lâm",
+        "skill": [
+            { "name": "Kim Cang Chưởng", "ref": "shao_lin_kim_cang" }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Lạc Băng Nhi",
+        "desc": "Nữ đệ tử thông minh của Nga Mi.",
+        "atk": 75,
+        "faction": "Nga Mi",
+        "skill": [
+            { "name": "Phật Quang Kiếm Pháp", "ref": "nga_mi_sword" }
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Diệp Tâm",
+        "desc": "Trưởng môn Nga Mi, người có tấm lòng nhân hậu.",
+        "atk": 80,
+        "faction": "Nga Mi",
+        "skill": [
+            { "name": "Từ Hàng Chưởng", "ref": "nga_mi_palm" }
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Tần Hạo",
+        "desc": "Đệ tử trung thành của Cái Bang.",
+        "atk": 85,
+        "faction": "Cái Bang",
+        "skill": [
+            { "name": "Đả Cẩu Bổng Pháp", "ref": "cai_bang_stick" }
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Hoàng Nhất Phong",
+        "desc": "Bang chủ Cái Bang, hào sảng vô song.",
+        "atk": 90,
+        "faction": "Cái Bang",
+        "skill": [
+            { "name": "Giáng Long Thập Bát Chưởng", "ref": "cai_bang_palm" }
+        ]
+    },
+    {
+        "id": 8,
+        "name": "Lăng Tuyết Nhi",
+        "desc": "Sát thủ bí ẩn của Đường Môn.",
+        "atk": 87,
+        "faction": "Đường Môn",
+        "skill": [
+            { "name": "Ám Khí Liên Hoàn", "ref": "duong_mon_hidden" }
+        ]
+    },
+    {
+        "id": 9,
+        "name": "Đường Kỳ Sơn",
+        "desc": "Gia chủ đời thứ ba của Đường Môn.",
+        "atk": 91,
+        "faction": "Đường Môn",
+        "skill": [
+            { "name": "Thiên La Địa Võng", "ref": "duong_mon_net" }
+        ]
+    },
+    {
+        "id": 10,
+        "name": "Lý Kỳ",
+        "desc": "Tán tu hành tẩu giang hồ, kiếm thuật phi phàm.",
+        "atk": 107,
+        "faction": "Tán Tu",
+        "skill": [
+            { "name": "Huyễn Ảnh Kiếm", "ref": "wander_sword" }
+        ]
+    },
+    {
+        "id": 11,
+        "name": "Phong Dật",
+        "desc": "Tán tu không màng danh lợi, nhưng võ công cao cường.",
+        "atk": 108,
+        "faction": "Tán Tu",
+        "skill": [
+            { "name": "Vô Ảnh Chỉ", "ref": "wander_finger" }
+        ]
+    },
+    {
+        "id": 12,
+        "name": "Linh Nhi",
+        "desc": "Nữ kiếm khách lang bạt, không thuộc môn phái nào.",
+        "atk": 105,
+        "faction": "Tán Tu",
+        "skill": [
+            { "name": "Tử Hà Kiếm", "ref": "wander_purple_sword" }
+        ]
+    },
+    {
+        "id": 13,
+        "name": "Vân Du",
+        "desc": "Một kiếm khách bí ẩn, không rõ lai lịch.",
+        "atk": 110,
+        "faction": "Tán Tu",
+        "skill": [
+            { "name": "Phong Ảnh Kiếm", "ref": "wander_wind_sword" }
+        ]
+    },
+    {
+        "id": 14,
+        "name": "Hàn Phong",
+        "desc": "Tán tu lạnh lùng, thích hành hiệp trượng nghĩa.",
+        "atk": 115,
+        "faction": "Tán Tu",
+        "skill": [
+            { "name": "Huyết Ảnh Chỉ", "ref": "wander_blood_finger" }
+        ]
+    }
+]

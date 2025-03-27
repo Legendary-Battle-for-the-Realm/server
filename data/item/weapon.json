@@ -1,0 +1,154 @@
+[
+    {
+        "id": 0,
+        "name": "Thái Cực Kiếm",
+        "atk": 90,
+        "desc": "Kiếm của Lý Vô Song, tinh thông Thái Cực Kiếm Pháp.",
+        "owner_id": 0,
+        "cultivation_required": "Trúc Cơ",
+        "skill": { "name": "Thái Cực Kiếm", "ref": "vo_dang_sword" }
+    },
+    {
+        "id": 1,
+        "name": "Vô Ảnh Kiếm",
+        "atk": 95,
+        "desc": "Kiếm sắc bén của Trương Thanh Phong, nhanh như bóng ma.",
+        "owner_id": 1,
+        "cultivation_required": "Trúc Cơ",
+        "skill": { "name": "Vô Ảnh Kiếm", "ref": "vo_dang_shadow_sword" }
+    },
+    {
+        "id": 2,
+        "name": "La Hán Côn",
+        "atk": 88,
+        "desc": "Côn pháp mạnh mẽ của Diệp Hàn, mang sức mạnh La Hán Chưởng.",
+        "owner_id": 2,
+        "cultivation_required": "Trúc Cơ",
+        "skill": { "name": "La Hán Chưởng", "ref": "shao_lin_palm" }
+    },
+    {
+        "id": 3,
+        "name": "Kim Cang Trượng",
+        "atk": 100,
+        "desc": "Trượng của Hư Không Đại Sư, mang uy lực Kim Cang Chưởng.",
+        "owner_id": 3,
+        "cultivation_required": "Trúc Cơ",
+        "skill": { "name": "Kim Cang Chưởng", "ref": "shao_lin_kim_cang" }
+    },
+    {
+        "id": 4,
+        "name": "Phật Quang Kiếm",
+        "atk": 80,
+        "desc": "Kiếm của Lạc Băng Nhi, chứa đựng sức mạnh Phật Quang.",
+        "owner_id": 4,
+        "cultivation_required": "Trúc Cơ",
+        "skill": { "name": "Phật Quang Kiếm Pháp", "ref": "nga_mi_sword" }
+    },
+    {
+        "id": 5,
+        "name": "Từ Hàng Chưởng Pháp",
+        "atk": 85,
+        "desc": "Chưởng pháp từ bi nhưng uy lực của Diệp Tâm.",
+        "owner_id": 5,
+        "cultivation_required": "Trúc Cơ",
+        "skill": { "name": "Từ Hàng Chưởng", "ref": "nga_mi_palm" }
+    },
+    {
+        "id": 6,
+        "name": "Đả Cẩu Bổng",
+        "atk": 90,
+        "desc": "Bổng pháp trứ danh của Cái Bang, do Tần Hạo sử dụng.",
+        "owner_id": 6,
+        "cultivation_required": "Trúc Cơ",
+        "skill": { "name": "Đả Cẩu Bổng Pháp", "ref": "cai_bang_stick" }
+    },
+    {
+        "id": 7,
+        "name": "Long Hổ Chưởng",
+        "atk": 100,
+        "desc": "Chưởng pháp mạnh mẽ của Hoàng Nhất Phong, kết hợp Giáng Long.",
+        "owner_id": 7,
+        "cultivation_required": "Trúc Cơ",
+        "skill": { "name": "Giáng Long Thập Bát Chưởng", "ref": "cai_bang_palm" }
+    },
+    {
+        "id": 8,
+        "name": "Ám Khí Huyết Ảnh",
+        "atk": 87,
+        "desc": "Ám khí của Lăng Tuyết Nhi, gây sát thương chí mạng.",
+        "owner_id": 8,
+        "cultivation_required": "Trúc Cơ",
+        "skill": { "name": "Ám Khí Liên Hoàn", "ref": "duong_mon_hidden" }
+    },
+    {
+        "id": 9,
+        "name": "Thiên La Phi Tiêu",
+        "atk": 92,
+        "desc": "Phi tiêu đặc chế của Đường Kỳ Sơn, giăng bẫy vô hình.",
+        "owner_id": 9,
+        "cultivation_required": "Trúc Cơ",
+        "skill": { "name": "Thiên La Địa Võng", "ref": "duong_mon_net" }
+    },
+
+
+    {
+        "id": 10,
+        "name": "Diệt Thế Ma Kiếm",
+        "atk": "550%",
+        "desc": "Thanh kiếm của Ma Vương, chứa đựng sức mạnh hủy diệt tuyệt đối.",
+        "owner_id": null,
+        "cultivation_required": "Thần Cảnh",
+        "skill": {
+            "name": "Diệt Thế Trảm",
+            "ref": "world_destruction_slash"
+        }
+    },
+    {
+        "id": 11,
+        "name": "Hắc Ám Thần Cung",
+        "atk": "530%",
+        "desc": "Cung thần của chúa tể bóng tối, có thể bắn ra mũi tên xuyên thấu linh hồn.",
+        "owner_id": null,
+        "cultivation_required": "Thần Cảnh",
+        "skill": {
+            "name": "Bóng Tối Tiễn Ảnh",
+            "ref": "eternal_darkness_arrow"
+        }
+    },
+    {
+        "id": 12,
+        "name": "Thiên Địa Thần Thương",
+        "atk": "520%",
+        "desc": "Ngọn thương đại diện cho sức mạnh thiên địa, mỗi cú đâm chấn động vạn vật.",
+        "owner_id": null,
+        "cultivation_required": "Thần Cảnh",
+        "skill": {
+            "name": "Thiên Địa Kinh Động",
+            "ref": "cosmic_spear"
+        }
+    },
+    {
+        "id": 13,
+        "name": "Vực Sâu Hủy Diệt Chùy",
+        "atk": "540%",
+        "desc": "Cây chùy sinh ra từ vực sâu, chỉ một cú vung có thể phá tan cả thế giới.",
+        "owner_id": null,
+        "cultivation_required": "Thần Cảnh",
+        "skill": {
+            "name": "Sâu Thẳm Hủy Diệt",
+            "ref": "abyssal_destruction"
+        }
+    },
+    {
+        "id": 14,
+        "name": "Hỗn Nguyên Kiếm",
+        "atk": "560%",
+        "desc": "Thanh kiếm tối thượng dung hợp mọi quy tắc, kẻ yếu không thể chạm vào.",
+        "owner_id": null,
+        "cultivation_required": "Thần Cảnh",
+        "skill": {
+            "name": "Hỗn Nguyên Tuyệt Sát",
+            "ref": "chaos_supreme_slash"
+        }
+    }   
+]

@@ -1,0 +1,199 @@
+[
+    {
+        "id": 0,
+        "name": "Thiên Tằm Bào",
+        "atk": "5%",
+        "def": "80%",
+        "desc": "Áo choàng được dệt từ tơ thiên giới, bảo vệ khỏi sát thương nội công.",
+        "owner_id": 0,
+        "cultivation_required": "Trung cấp",
+        "skill": {
+            "name": "Thiên Giới Hộ Thuẫn",
+            "ref": "heavenly_shield"
+        }
+    },
+    {
+        "id": 1,
+        "name": "Thiên Kiếm",
+        "atk": "90%",
+        "def": "30%",
+        "desc": "Kiếm thần của Võ Đang, sắc bén vô song.",
+        "owner_id": 1,
+        "cultivation_required": "Cao cấp",
+        "skill": {
+            "name": "Vô Ảnh Trảm",
+            "ref": "shadow_slash"
+        }
+    },
+    {
+        "id": 2,
+        "name": "Thiết Quyền Giáp",
+        "atk": "70%",
+        "def": "50%",
+        "desc": "Găng tay cường hóa của Thiếu Lâm, giúp tăng lực quyền pháp.",
+        "owner_id": 2,
+        "cultivation_required": "Trung cấp",
+        "skill": {
+            "name": "La Hán Quyền",
+            "ref": "arhat_fist"
+        }
+    },
+    {
+        "id": 3,
+        "name": "Kim Cang Giới",
+        "atk": "60%",
+        "def": "85%",
+        "desc": "Chuỗi hạt của trụ trì Thiếu Lâm, hộ thể mạnh mẽ.",
+        "owner_id": 3,
+        "cultivation_required": "Cao cấp",
+        "skill": {
+            "name": "Bất Hoại Kim Cang",
+            "ref": "diamond_body"
+        }
+    },
+    {
+        "id": 4,
+        "name": "Phật Quang Kiếm",
+        "atk": "75%",
+        "def": "40%",
+        "desc": "Kiếm pháp của Nga Mi, chứa đựng ánh sáng Phật pháp.",
+        "owner_id": 4,
+        "cultivation_required": "Trung cấp",
+        "skill": {
+            "name": "Phật Quang Trảm",
+            "ref": "buddha_light_slash"
+        }
+    },
+    {
+        "id": 5,
+        "name": "Từ Hàng Trượng",
+        "atk": "65%",
+        "def": "70%",
+        "desc": "Trượng của trưởng môn Nga Mi, biểu tượng của lòng từ bi.",
+        "owner_id": 5,
+        "cultivation_required": "Cao cấp",
+        "skill": {
+            "name": "Từ Hàng Chưởng",
+            "ref": "merciful_palm"
+        }
+    },
+    {
+        "id": 6,
+        "name": "Đả Cẩu Bổng",
+        "atk": "80%",
+        "def": "55%",
+        "desc": "Bảo bổng trấn phái của Cái Bang, vô cùng lợi hại.",
+        "owner_id": 6,
+        "cultivation_required": "Trung cấp",
+        "skill": {
+            "name": "Bổng Pháp Tuyệt Kỹ",
+            "ref": "stick_mastery"
+        }
+    },
+    {
+        "id": 7,
+        "name": "Giáng Long Bổng",
+        "atk": "95%",
+        "def": "35%",
+        "desc": "Bổng pháp mạnh nhất của Cái Bang, có thể đánh bại cả rồng.",
+        "owner_id": 7,
+        "cultivation_required": "Cao cấp",
+        "skill": {
+            "name": "Giáng Long Chưởng",
+            "ref": "dragon_palm"
+        }
+    },
+    {
+        "id": 8,
+        "name": "Hắc Ảnh Tiễn",
+        "atk": "85%",
+        "def": "45%",
+        "desc": "Cung tên của sát thủ Đường Môn, nhanh và chí mạng.",
+        "owner_id": 8,
+        "cultivation_required": "Trung cấp",
+        "skill": {
+            "name": "Ám Tiễn Xạ Ảnh",
+            "ref": "shadow_arrow"
+        }
+    },
+    {
+        "id": 9,
+        "name": "Thiên La Tụ",
+        "atk": "88%",
+        "def": "50%",
+        "desc": "Ám khí bí mật của Đường Môn, không ai thoát khỏi được.",
+        "owner_id": 9,
+        "cultivation_required": "Cao cấp",
+        "skill": {
+            "name": "Thiên La Địa Võng",
+            "ref": "heaven_net"
+        }
+    },
+
+
+    {
+        "id": 10,
+        "name": "Diệt Thế Ma Y",
+        "atk": "-170%",
+        "def": "280%",
+        "desc": "Áo choàng của Ma Vương, mang lại sức mạnh hủy diệt nhưng làm suy giảm khả năng phòng thủ nghiêm trọng.",
+        "owner_id": null,
+        "cultivation_required": "Thần cảnh",
+        "skill": {
+            "name": "Diệt Thế Ma Lực",
+            "ref": "world_destruction"
+        }
+    },
+    {
+        "id": 11,
+        "name": "Hắc Ám Thánh Giáp",
+        "atk": "-160%",
+        "def": "220%",
+        "desc": "Giáp của chúa tể bóng tối, gia tăng sức mạnh tà ác nhưng làm yếu đi khả năng phòng thủ.",
+        "owner_id": null,
+        "cultivation_required": "Thần cảnh",
+        "skill": {
+            "name": "Bóng Tối Vĩnh Hằng",
+            "ref": "eternal_darkness"
+        }
+    },
+    {
+        "id": 12,
+        "name": "Thiên Địa Thánh Y",
+        "atk": "180%",
+        "def": "-130%",
+        "desc": "Áo choàng đại diện cho sức mạnh của thiên địa, giúp gia tăng công kích vượt trội nhưng giảm thủ.",
+        "owner_id": null,
+        "cultivation_required": "Thần cảnh",
+        "skill": {
+            "name": "Thiên Địa Uy Năng",
+            "ref": "cosmic_force"
+        }
+    },
+    {
+        "id": 13,
+        "name": "Vực Sâu Hộ Giáp",
+        "atk": "-160%",
+        "def": "170%",
+        "desc": "Giáp được tạo ra từ năng lượng vực sâu, tăng sát thương khủng khiếp nhưng khiến người mặc dễ bị tổn thương hơn.",
+        "owner_id": null,
+        "cultivation_required": "Thần cảnh",
+        "skill": {
+            "name": "Sâu Thẳm Vô Hạn",
+            "ref": "abyssal_power"
+        }
+    },
+    {
+        "id": 14,
+        "name": "Hỗn Mang Thần Bào",
+        "atk": "260%",
+        "def": "-190%",
+        "desc": "Áo choàng mang sức mạnh hỗn mang, gia tăng khả năng công kích nhưng làm suy yếu phòng thủ đến mức cực hạn.",
+        "owner_id": null,
+        "cultivation_required": "Thần cảnh",
+        "skill": {
+            "name": "Hỗn Mang Thống Trị",
+            "ref": "chaos_dominance"
+        }
+    } 
+]

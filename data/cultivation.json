@@ -1,0 +1,10 @@
+[
+    { "id": 1, "name": "Nhập môn", "required_qi": 150 },
+    { "id": 2, "name": "Sơ cấp", "required_qi": 500 },
+    { "id": 3, "name": "Trung cấp", "required_qi": 1500 },
+    { "id": 4, "name": "Cao cấp", "required_qi": 5000 },
+    { "id": 5, "name": "Đại thành", "required_qi": 15000 },
+    { "id": 6, "name": "Đỉnh phong", "required_qi": 50000 },
+    { "id": 7, "name": "Tuyệt đỉnh", "required_qi": 150000 },
+    { "id": 8, "name": "Thần cảnh", "required_qi": 500000 }
+]

@@ -1,0 +1,14 @@
+[
+    {
+        "id": 0,
+        "name": "Công",
+        "desc": "",
+        "ref": "atk_card"
+    },
+    {
+        "id": 1,
+        "name": "Thủ",
+        "desc": "",
+        "ref": "def_card"
+    }
+]
