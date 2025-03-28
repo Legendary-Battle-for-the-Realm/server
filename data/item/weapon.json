@@ -1,94 +1,90 @@
 [
     {
-        "id": 0,
-        "name": "Thái Cực Kiếm",
-        "atk": 90,
-        "desc": "Kiếm của Lý Vô Song, tinh thông Thái Cực Kiếm Pháp.",
-        "owner_id": 0,
-        "cultivation_required": "Trúc Cơ",
-        "skill": { "name": "Thái Cực Kiếm", "ref": "vo_dang_sword" }
-    },
-    {
         "id": 1,
         "name": "Vô Ảnh Kiếm",
-        "atk": 95,
-        "desc": "Kiếm sắc bén của Trương Thanh Phong, nhanh như bóng ma.",
+        "atk": "65%",
+        "desc": "Kiếm sắc bén của Trương Thanh Phong, cho phép tấn công nhanh như bóng ma và ẩn mình ngay sau đòn đánh.",
         "owner_id": 1,
-        "cultivation_required": "Trúc Cơ",
-        "skill": { "name": "Vô Ảnh Kiếm", "ref": "vo_dang_shadow_sword" }
-    },
-    {
-        "id": 2,
-        "name": "La Hán Côn",
-        "atk": 88,
-        "desc": "Côn pháp mạnh mẽ của Diệp Hàn, mang sức mạnh La Hán Chưởng.",
-        "owner_id": 2,
-        "cultivation_required": "Trúc Cơ",
-        "skill": { "name": "La Hán Chưởng", "ref": "shao_lin_palm" }
-    },
-    {
-        "id": 3,
-        "name": "Kim Cang Trượng",
-        "atk": 100,
-        "desc": "Trượng của Hư Không Đại Sư, mang uy lực Kim Cang Chưởng.",
-        "owner_id": 3,
-        "cultivation_required": "Trúc Cơ",
-        "skill": { "name": "Kim Cang Chưởng", "ref": "shao_lin_kim_cang" }
+        "cultivation_required": "Trung cấp",
+        "skill": {
+            "name": "Vô Ảnh Kiếm",
+            "ref": "vo_dang_shadow_sword"
+        }
     },
     {
         "id": 4,
         "name": "Phật Quang Kiếm",
-        "atk": 80,
-        "desc": "Kiếm của Lạc Băng Nhi, chứa đựng sức mạnh Phật Quang.",
+        "atk": "70%",
+        "desc": "Thanh kiếm của Lạc Băng Nhi, phát ra ánh sáng Phật pháp để tăng sát thương dựa trên nội lực và làm suy yếu phòng thủ kẻ địch.",
         "owner_id": 4,
-        "cultivation_required": "Trúc Cơ",
-        "skill": { "name": "Phật Quang Kiếm Pháp", "ref": "nga_mi_sword" }
+        "cultivation_required": "Trung cấp",
+        "skill": {
+            "name": "Phật Quang Kiếm Pháp",
+            "ref": "nga_mi_sword"
+        }
     },
     {
         "id": 5,
         "name": "Từ Hàng Chưởng Pháp",
-        "atk": 85,
-        "desc": "Chưởng pháp từ bi nhưng uy lực của Diệp Tâm.",
+        "atk": "70%",
+        "desc": "Chưởng pháp của Diệp Tâm, mang đậm tinh thần từ bi, hỗ trợ đồng đội qua việc tăng phòng thủ và hồi phục HP.",
         "owner_id": 5,
-        "cultivation_required": "Trúc Cơ",
-        "skill": { "name": "Từ Hàng Chưởng", "ref": "nga_mi_palm" }
+        "cultivation_required": "Trung cấp",
+        "skill": {
+            "name": "Từ Hàng Chưởng",
+            "ref": "nga_mi_palm"
+        }
     },
     {
         "id": 6,
         "name": "Đả Cẩu Bổng",
-        "atk": 90,
-        "desc": "Bổng pháp trứ danh của Cái Bang, do Tần Hạo sử dụng.",
+        "atk": "85%",
+        "desc": "Bổng pháp của Tần Hạo, cho phép đẩy lùi đối thủ và phá vỡ đợt tấn công của kẻ thù.",
         "owner_id": 6,
-        "cultivation_required": "Trúc Cơ",
-        "skill": { "name": "Đả Cẩu Bổng Pháp", "ref": "cai_bang_stick" }
+        "cultivation_required": "Cao cấp",
+        "skill": {
+            "name": "Đả Cẩu Bổng Pháp",
+            "ref": "cai_bang_stick"
+        }
     },
     {
         "id": 7,
         "name": "Long Hổ Chưởng",
-        "atk": 100,
-        "desc": "Chưởng pháp mạnh mẽ của Hoàng Nhất Phong, kết hợp Giáng Long.",
+        "atk": "90%",
+        "desc": "Chưởng pháp của Hoàng Nhất Phong, kết hợp sức mạnh Giáng Long Thập Bát Chưởng để gây sát thương liên tục và làm choáng đối thủ.",
         "owner_id": 7,
-        "cultivation_required": "Trúc Cơ",
-        "skill": { "name": "Giáng Long Thập Bát Chưởng", "ref": "cai_bang_palm" }
+        "cultivation_required": "Cao cấp",
+        "skill": {
+            "name": "Giáng Long Thập Bát Chưởng",
+            "ref": "cai_bang_palm"
+        }
     },
     {
         "id": 8,
         "name": "Ám Khí Huyết Ảnh",
-        "atk": 87,
-        "desc": "Ám khí của Lăng Tuyết Nhi, gây sát thương chí mạng.",
+        "atk": "87%",
+        "desc": "Thanh kiếm của Lăng Tuyết Nhi, sinh ra từ ám khí, giúp tăng sát thương chí mạng và khả năng né tránh đòn tấn công.",
         "owner_id": 8,
-        "cultivation_required": "Trúc Cơ",
-        "skill": { "name": "Ám Khí Liên Hoàn", "ref": "duong_mon_hidden" }
+        "cultivation_required": "Trung cấp",
+        "skill": {
+            "name": "Ám Khí Liên Hoàn",
+            "ref": "duong_mon_hidden"
+        }
     },
     {
         "id": 9,
         "name": "Thiên La Phi Tiêu",
-        "atk": 92,
-        "desc": "Phi tiêu đặc chế của Đường Kỳ Sơn, giăng bẫy vô hình.",
+        "atk": "92%",
+        "desc": "Phi tiêu của Đường Kỳ Sơn, được thiết kế để giăng bẫy đối thủ từ xa, làm chậm và ràng buộc địch thủ hiệu quả.",
         "owner_id": 9,
-        "cultivation_required": "Trúc Cơ",
-        "skill": { "name": "Thiên La Địa Võng", "ref": "duong_mon_net" }
+        "cultivation_required": "Trung cấp",
+        "skill": {
+            "name": "Thiên La Địa Võng",
+            "ref": "duong_mon_net"
+        }
     },
+
+
 
 
     {
