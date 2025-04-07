@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Server",
+    "\\Server\\Controllers",
+    "\\Server\\GameLogic",
+    "\\Server\\Networking",
+    "\\Shared"
+  ],
+  "SelectedNode": "\\Shared\\Shared.csproj",
+  "PreviewInSolutionExplorer": false
+}

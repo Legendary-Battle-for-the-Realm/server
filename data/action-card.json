@@ -1,13 +1,13 @@
 [
     {
         "id": 0,
-        "name": "Công",
+        "name": "Kích",
         "desc": "",
         "ref": "atk_card"
     },
     {
         "id": 1,
-        "name": "Thủ",
+        "name": "Ngự",
         "desc": "",
         "ref": "def_card"
     }
