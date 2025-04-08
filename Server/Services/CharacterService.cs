@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Server.Data;
-using Shared.Models; // Giả sử model Character nằm trong Shared
+using Shared.Models;
 
 namespace Server.Services
 {
@@ -13,11 +13,50 @@ namespace Server.Services
             _context = context;
         }
 
-        public async Task<List<Character>> GetCharactersAsync()
+        public async Task<List<Character>> GetAllCharactersAsync()
         {
-            return await _context.Characters.ToListAsync();
+            return await _context.Characters.Include(c => c.Skills).ToListAsync();
         }
 
-        // Bạn có thể thêm các phương thức khác như Create, Update, Delete
+        public async Task<Character> GetCharacterByIdAsync(int id)
+        {
+            return await _context.Characters.Include(c => c.Skills).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Character> CreateCharacterAsync(Character character)
+        {
+            _context.Characters.Add(character);
+            await _context.SaveChangesAsync();
+            return character;
+        }
+
+        public async Task<Character> UpdateCharacterAsync(int id, Character character)
+        {
+            var existing = await _context.Characters.FindAsync(id);
+            if (existing == null) return null;
+
+            existing.Name = character.Name;
+            existing.Desc = character.Desc;
+            existing.Atk = character.Atk;
+            existing.Faction = character.Faction;
+            existing.Cultivation = character.Cultivation;
+            existing.HP = character.HP;
+            existing.Qi = character.Qi;
+            existing.Skills = character.Skills;
+            existing.UserId = character.UserId;
+
+            await _context.SaveChangesAsync();
+            return existing;
+        }
+
+        public async Task<bool> DeleteCharacterAsync(int id)
+        {
+            var character = await _context.Characters.FindAsync(id);
+            if (character == null) return false;
+
+            _context.Characters.Remove(character);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
