@@ -43,6 +43,6 @@ namespace Server.Controllers
     public class CreateMatchRequest
     {
         public int MatchId { get; set; }
-        public List<string> PlayerOrder { get; set; }
+        public required List<string> PlayerOrder { get; set; }
     }
 }

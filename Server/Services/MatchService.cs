@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using Server.GameLogic;
 
 namespace Server.Services
@@ -25,9 +25,10 @@ namespace Server.Services
             return matchState;
         }
 
-        public MatchState GetMatchState(int matchId)
+        public MatchState? GetMatchState(int matchId)
         {
-            return _matches.TryGetValue(matchId, out var match) ? match : null;
+            _matches.TryGetValue(matchId, out var match);
+            return match; // Trả về null nếu không tìm thấy
         }
 
         public void UpdateMatchState(int matchId, MatchState updatedState)

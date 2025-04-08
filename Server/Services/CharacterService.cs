@@ -18,7 +18,7 @@ namespace Server.Services
             return await _context.Characters.Include(c => c.Skills).ToListAsync();
         }
 
-        public async Task<Character> GetCharacterByIdAsync(int id)
+        public async Task<Character?> GetCharacterByIdAsync(int id)
         {
             return await _context.Characters.Include(c => c.Skills).FirstOrDefaultAsync(c => c.Id == id);
         }
@@ -30,7 +30,7 @@ namespace Server.Services
             return character;
         }
 
-        public async Task<Character> UpdateCharacterAsync(int id, Character character)
+        public async Task<Character?> UpdateCharacterAsync(int id, Character character)
         {
             var existing = await _context.Characters.FindAsync(id);
             if (existing == null) return null;
