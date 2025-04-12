@@ -1,7 +1,0 @@
-[
-    {
-        "name": "item_a",
-        "desc": "lmao",
-        "func": "System.out.print(hello)"
-    }
-]

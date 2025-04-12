@@ -1,0 +1,212 @@
+[
+  {
+    "id": 0,
+    "name": "Lý Vô Song",
+    "desc": "Kiếm khách lạnh lùng đến từ Võ Đang, nổi tiếng với phong cách điềm tĩnh và sắc bén. Anh có khả năng lựa chọn 2 thẻ nhân vật cùng tông môn để nhận buff đặc trưng.",
+    "faction": "Võ Đang",
+    "atk": 85,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "vo_dang_sword" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Trương Thanh Phong",
+    "desc": "Trưởng môn đời trước của Võ Đang, mang phong cách lạnh lùng, đầy kinh nghiệm, nổi tiếng với kỹ năng tấn công nhanh và biến mất như bóng ma.",
+    "faction": "Võ Đang",
+    "atk": 90,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "vo_dang_shadow_sword" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Diệp Hàn",
+    "desc": "Đệ tử xuất sắc của Thiếu Lâm Tự, nổi bật với tinh thần kiên định và sức mạnh nội lực.",
+    "faction": "Thiếu Lâm",
+    "atk": 88,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "shao_lin_palm" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Hư Không Đại Sư",
+    "desc": "Trụ trì của Thiếu Lâm, tinh thông võ công và uy nghi với kiến thức Phật pháp sâu rộng.",
+    "faction": "Thiếu Lâm",
+    "atk": 92,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "shao_lin_kim_cang" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Lạc Băng Nhi",
+    "desc": "Nữ đệ tử thông minh của Nga Mi, nổi bật với sự nhạy bén và chiến thuật tinh tế.",
+    "faction": "Nga Mi",
+    "atk": 75,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "nga_mi_sword" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Diệp Tâm",
+    "desc": "Trưởng môn của Nga Mi, nổi bật với tấm lòng nhân hậu và sự am hiểu chiến thuật tập thể.",
+    "faction": "Nga Mi",
+    "atk": 80,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "nga_mi_palm" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Tần Hạo",
+    "desc": "Đệ tử trung thành của Cái Bang, luôn sẵn sàng chiến đấu với tinh thần mãnh liệt và tính bền bỉ cao.",
+    "faction": "Cái Bang",
+    "atk": 85,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "cai_bang_stick" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Hoàng Nhất Phong",
+    "desc": "Bang chủ hào sảng của Cái Bang, là hình mẫu của lãnh đạo uy nghi, mang đến sức mạnh tổng hợp cho đội quân.",
+    "faction": "Cái Bang",
+    "atk": 90,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "cai_bang_palm" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Lăng Tuyết Nhi",
+    "desc": "Sát thủ bí ẩn của Đường Môn, nổi tiếng với tốc độ và khả năng di chuyển linh hoạt.",
+    "faction": "Đường Môn",
+    "atk": 87,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "duong_mon_hidden" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Đường Kỳ Sơn",
+    "desc": "Gia chủ đời thứ ba của Đường Môn, mang sức mạnh truyền thống và sự điềm tĩnh của dòng tộc.",
+    "faction": "Đường Môn",
+    "atk": 91,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "duong_mon_net" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Lý Kỳ",
+    "desc": "Tán tu hành tẩu giang hồ, nổi tiếng với phong cách kiếm thuật phi phàm và khả năng tạo ảo ảnh.",
+    "faction": "Tán Tu",
+    "atk": 107,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "wander_sword" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Phong Dật",
+    "desc": "Tán tu không màng danh lợi, nổi tiếng với võ công cao cường và tinh thần vô tư.",
+    "faction": "Tán Tu",
+    "atk": 108,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "wander_finger" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Linh Nhi",
+    "desc": "Nữ kiếm khách tự do, không thuộc bất kỳ môn phái nào, tạo nên phong cách đánh độc lập và quyết đoán.",
+    "faction": "Tán Tu",
+    "atk": 105,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "wander_purple_sword" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Vân Du",
+    "desc": "Kiếm khách bí ẩn, mang vẻ lạnh lùng và phong thái ẩn chứa nhiều bí ẩn.",
+    "faction": "Tán Tu",
+    "atk": 110,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "wander_wind_sword" }
+    ]
+  },
+  {
+    "id": 0,
+    "name": "Hàn Phong",
+    "desc": "Tán tu lạnh lùng, luôn hướng về sự trượng nghĩa dù con đường đầy gian truân.",
+    "faction": "Tán Tu",
+    "atk": 115,
+    "hp": 100,
+    "qi": 50,
+    "userId": 1,
+    "cultivation": "Nhập Môn",
+    "skills": [
+      { "ref": "wander_blood_finger" }
+    ]
+  }
+]

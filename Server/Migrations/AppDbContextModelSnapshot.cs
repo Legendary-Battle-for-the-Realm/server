@@ -53,7 +53,8 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SkillId");
+                    b.HasIndex("SkillId")
+                        .IsUnique();
 
                     b.ToTable("Armors");
                 });
@@ -76,6 +77,7 @@ namespace Server.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<int?>("Quantity")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Ref")
@@ -184,7 +186,7 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EquipmentSkill");
+                    b.ToTable("EquipmentSkills");
                 });
 
             modelBuilder.Entity("Shared.Models.Skill", b =>
@@ -193,11 +195,17 @@ namespace Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("CharacterId")
+                    b.Property<int>("CharacterId")
                         .HasColumnType("int");
 
                     b.Property<int>("Cost")
                         .HasColumnType("int");
+
+                    b.Property<string>("Desc")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Effect")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -270,7 +278,8 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SkillId");
+                    b.HasIndex("SkillId")
+                        .IsUnique();
 
                     b.ToTable("Weapons");
                 });
@@ -278,8 +287,8 @@ namespace Server.Migrations
             modelBuilder.Entity("Shared.Models.Armor", b =>
                 {
                     b.HasOne("Shared.Models.EquipmentSkill", "Skill")
-                        .WithMany()
-                        .HasForeignKey("SkillId")
+                        .WithOne()
+                        .HasForeignKey("Shared.Models.Armor", "SkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -290,8 +299,7 @@ namespace Server.Migrations
                 {
                     b.HasOne("Shared.Models.Effect", "Effect")
                         .WithMany()
-                        .HasForeignKey("EffectId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("EffectId");
 
                     b.Navigation("Effect");
                 });
@@ -300,14 +308,16 @@ namespace Server.Migrations
                 {
                     b.HasOne("Shared.Models.Character", null)
                         .WithMany("Skills")
-                        .HasForeignKey("CharacterId");
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Shared.Models.Weapon", b =>
                 {
                     b.HasOne("Shared.Models.EquipmentSkill", "Skill")
-                        .WithMany()
-                        .HasForeignKey("SkillId")
+                        .WithOne()
+                        .HasForeignKey("Shared.Models.Weapon", "SkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -6,3 +6,4 @@ MySql.EntityFrameworkCore                          8.0.11
 Pomelo.EntityFrameworkCore.MySql                   8.0.0 
 Swashbuckle.AspNetCore                             8.1.0     
 System.IdentityModel.Tokens.Jwt                    8.0.0    
+BCrypt.Net-Next                                    4.0.3

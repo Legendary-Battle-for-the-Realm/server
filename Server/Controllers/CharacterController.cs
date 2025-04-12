@@ -11,10 +11,13 @@ namespace Server.Controllers
     public class CharacterController : ControllerBase
     {
         private readonly CharacterService _characterService;
-
-        public CharacterController(CharacterService characterService)
+        private readonly DataSyncService _dataSyncService;
+        private readonly CardSyncService _cardSyncService;
+        public CharacterController(CharacterService characterService, DataSyncService dataSyncService, CardSyncService cardSyncService)
         {
             _characterService = characterService;
+            _dataSyncService = dataSyncService;
+            _cardSyncService = cardSyncService;
         }
 
         [HttpGet]
@@ -54,5 +57,31 @@ namespace Server.Controllers
             if (!result) return NotFound();
             return NoContent();
         }
+        // [HttpPost("sync")]
+        // public async Task<IActionResult> SyncCharacters()
+        // {
+        //     try
+        //     {
+        //         await _dataSyncService.SyncCharactersFromJsonAsync();
+        //         return Ok("Characters synced successfully.");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return BadRequest($"Error syncing characters: {ex.Message}");
+        //     }
+        // }
+        // [HttpPost("sync-cards")]
+        // public async Task<IActionResult> SyncCards()
+        // {
+        //     try
+        //     {
+        //         await _cardSyncService.SyncCardsFromJsonAsync();
+        //         return Ok("Đồng bộ thẻ thành công.");
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         return BadRequest($"Lỗi khi đồng bộ thẻ: {ex.Message}");
+        //     }
+        // }
     }
 }

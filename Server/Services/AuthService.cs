@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BCrypt.Net; // Thêm namespace cho BCrypt
 
 namespace Server.Services
 {
@@ -23,11 +24,12 @@ namespace Server.Services
 
         public async Task<User> RegisterAsync(string username, string password, string email)
         {
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password); // Hash mật khẩu
             var user = new User
             {
                 UserId = 0, // Gán giá trị mặc định, EF sẽ tự động sinh
                 Username = username,
-                Password = password, // Trong thực tế, bạn nên mã hóa password
+                Password = hashedPassword, // Lưu mật khẩu đã hash
                 Email = email,
                 HealthPoints = 100
             };
@@ -38,8 +40,9 @@ namespace Server.Services
 
         public async Task<string> LoginAsync(string username, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
-            if (user == null) throw new Exception("Invalid credentials");
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password)) // Kiểm tra mật khẩu
+                throw new Exception("Invalid credentials");
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is missing"));

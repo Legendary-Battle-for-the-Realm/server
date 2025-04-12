@@ -73,7 +73,7 @@ namespace Server.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "EquipmentSkill",
+                name: "EquipmentSkills",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -85,7 +85,7 @@ namespace Server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EquipmentSkill", x => x.Id);
+                    table.PrimaryKey("PK_EquipmentSkills", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -115,12 +115,16 @@ namespace Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CharacterId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Ref = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Cost = table.Column<int>(type: "int", nullable: false),
-                    CharacterId = table.Column<int>(type: "int", nullable: true)
+                    Desc = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Effect = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -129,7 +133,8 @@ namespace Server.Migrations
                         name: "FK_Skills_Characters_CharacterId",
                         column: x => x.CharacterId,
                         principalTable: "Characters",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -147,7 +152,7 @@ namespace Server.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Type = table.Column<int>(type: "int", nullable: false),
                     EffectId = table.Column<int>(type: "int", nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true)
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -156,8 +161,7 @@ namespace Server.Migrations
                         name: "FK_Cards_Effects_EffectId",
                         column: x => x.EffectId,
                         principalTable: "Effects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -184,9 +188,9 @@ namespace Server.Migrations
                 {
                     table.PrimaryKey("PK_Armors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Armors_EquipmentSkill_SkillId",
+                        name: "FK_Armors_EquipmentSkills_SkillId",
                         column: x => x.SkillId,
-                        principalTable: "EquipmentSkill",
+                        principalTable: "EquipmentSkills",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -213,9 +217,9 @@ namespace Server.Migrations
                 {
                     table.PrimaryKey("PK_Weapons", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Weapons_EquipmentSkill_SkillId",
+                        name: "FK_Weapons_EquipmentSkills_SkillId",
                         column: x => x.SkillId,
-                        principalTable: "EquipmentSkill",
+                        principalTable: "EquipmentSkills",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -224,7 +228,8 @@ namespace Server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Armors_SkillId",
                 table: "Armors",
-                column: "SkillId");
+                column: "SkillId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cards_EffectId",
@@ -239,7 +244,8 @@ namespace Server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Weapons_SkillId",
                 table: "Weapons",
-                column: "SkillId");
+                column: "SkillId",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -270,7 +276,7 @@ namespace Server.Migrations
                 name: "Characters");
 
             migrationBuilder.DropTable(
-                name: "EquipmentSkill");
+                name: "EquipmentSkills");
         }
     }
 }
