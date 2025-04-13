@@ -16,16 +16,18 @@ namespace Server.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Room> Rooms { get; set; } 
         public DbSet<Player> Players { get; set; } 
+        public DbSet<CardLocation> CardLocations { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Cấu hình quan hệ giữa Character và Skill
-            modelBuilder.Entity<Character>()
+                modelBuilder.Entity<Character>()
                 .HasMany(c => c.Skills)
-                .WithOne()
-                .HasForeignKey(s => s.CharacterId);
+                .WithOne(s => s.Character)
+                .HasForeignKey(s => s.CharacterId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Cấu hình quan hệ giữa Armor và EquipmentSkill
             modelBuilder.Entity<Armor>()
@@ -178,6 +180,34 @@ namespace Server.Data
                 .HasMany(r => r.Players)
                 .WithOne()
                 .HasForeignKey(p => p.RoomId);
+
+            // Cấu hình mối quan hệ giữa CardLocation và Card
+            modelBuilder.Entity<CardLocation>()
+                .HasOne(cl => cl.Card)
+                .WithMany()
+                .HasForeignKey(cl => cl.CardId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Cấu hình mối quan hệ giữa CardLocation và Room
+            modelBuilder.Entity<CardLocation>()
+                .HasOne(cl => cl.Room)
+                .WithMany()
+                .HasForeignKey(cl => cl.RoomId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Cấu hình mối quan hệ giữa CardLocation và Player
+            modelBuilder.Entity<CardLocation>()
+                .HasOne(cl => cl.Player)
+                .WithMany()
+                .HasForeignKey(cl => cl.PlayerId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Cấu hình mối quan hệ giữa Room và Player
+            modelBuilder.Entity<Room>()
+                .HasMany(r => r.Players)
+                .WithOne(p => p.Room)
+                .HasForeignKey(p => p.RoomId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

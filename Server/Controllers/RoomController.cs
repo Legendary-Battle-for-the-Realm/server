@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using GameServer.Services;
+using Server.Services;
 using Shared.Models;
 
-namespace GameServer.Controllers
+namespace Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,9 +16,9 @@ namespace GameServer.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult CreateRoom([FromBody] CreateRoomRequest request)
+        public async Task<IActionResult> CreateRoom([FromBody] CreateRoomRequest request)
         {
-            var room = _roomService.CreateRoom(request.MaxPlayers);
+            var room = await _roomService.CreateRoomAsync(request.MaxPlayers);
             return Ok(room);
         }
     }

@@ -34,6 +34,7 @@ namespace Server.Services
             // Đồng bộ Weapons
             await SyncWeaponsAsync();
 
+            // Đồng bộ Characters và Skills
             await SyncCharactersAsync();
         }
 
@@ -255,7 +256,7 @@ namespace Server.Services
                     Def = a.Def,
                     Desc = a.Desc,
                     UserId = a.UserId,
-                    CultivationRequired = a.CultivationRequired ?? "Nhập môn",  // Gán giá trị mặc định nếu null
+                    CultivationRequired = a.CultivationRequired ?? "Nhập môn",
                     Skill = new EquipmentSkill
                     {
                         Id = 0,
@@ -286,7 +287,7 @@ namespace Server.Services
                     existing.Def = armor.Def;
                     existing.Desc = armor.Desc;
                     existing.UserId = armor.UserId;
-                    existing.CultivationRequired = armor.CultivationRequired ?? "Nhập môn";  // Gán giá trị mặc định nếu null
+                    existing.CultivationRequired = armor.CultivationRequired ?? "Nhập môn";
 
                     existing.Skill.Name = armor.Skill.Name;
                     existing.Skill.Ref = armor.Skill.Ref;
@@ -390,14 +391,30 @@ namespace Server.Services
 
         private async Task SyncCharactersAsync()
         {
-            var filePath = Path.Combine(_dataPath, "character.json");
-            if (!File.Exists(filePath))
+            // Load skills from skill.json
+            var skillFilePath = Path.Combine(_dataPath, "skill.json");
+            if (!File.Exists(skillFilePath))
             {
-                throw new FileNotFoundException($"Không tìm thấy file {filePath}.");
+                throw new FileNotFoundException($"Không tìm thấy file {skillFilePath}.");
             }
 
-            var json = await File.ReadAllTextAsync(filePath);
-            var characters = JsonConvert.DeserializeObject<List<Character>>(json);
+            var skillJson = await File.ReadAllTextAsync(skillFilePath);
+            var skillData = JsonConvert.DeserializeObject<List<Skill>>(skillJson);
+
+            if (skillData == null)
+            {
+                throw new InvalidOperationException("Không thể phân tích file skill.json.");
+            }
+
+            // Load characters from character.json
+            var characterFilePath = Path.Combine(_dataPath, "character.json");
+            if (!File.Exists(characterFilePath))
+            {
+                throw new FileNotFoundException($"Không tìm thấy file {characterFilePath}.");
+            }
+
+            var characterJson = await File.ReadAllTextAsync(characterFilePath);
+            var characters = JsonConvert.DeserializeObject<List<Character>>(characterJson);
 
             if (characters == null)
             {
@@ -434,19 +451,55 @@ namespace Server.Services
                     Desc = c.Desc,
                     Faction = c.Faction,
                     Cultivation = c.Cultivation ?? "Nhập môn",
-                    UserId = c.UserId != 0 ? c.UserId : 0,  // Gán giá trị mặc định nếu UserId không được cung cấp
+                    UserId = c.UserId != 0 ? c.UserId : 0,
+                    HP = c.HP,
                     Qi = c.Qi,
-                    Skills = c.Skills?.Select(s => new Skill
-                    {
-                        Id = 0,
-                        Name = s.Name,
-                        Ref = s.Ref,
-                        Desc = s.Desc,
-                        Effect = s.Effect
-                    }).ToList() ?? new List<Skill>()
+                    Atk = c.Atk,
+                    Skills = new List<Skill>() // Tạm thời để trống, sẽ gán sau
                 }).ToList();
 
                 await _context.Characters.AddRangeAsync(newCharacters);
+                await _context.SaveChangesAsync();
+
+                // Sau khi lưu Characters, gán Skills cho từng Character
+                var savedCharacters = await _context.Characters
+                    .Include(c => c.Skills)
+                    .Where(c => newCharacters.Select(nc => nc.Name).Contains(c.Name))
+                    .ToListAsync();
+
+                foreach (var character in savedCharacters)
+                {
+                    var originalCharacter = characters.FirstOrDefault(c => c.Name == character.Name);
+                    if (originalCharacter?.Skills == null) continue;
+
+                    foreach (var skillRef in originalCharacter.Skills)
+                    {
+                        var skill = skillData.FirstOrDefault(s => s.Ref == skillRef.Ref);
+                        if (skill != null)
+                        {
+                            var newSkill = new Skill
+                            {
+                                CharacterId = character.Id,
+                                Name = skill.Name,
+                                Ref = skill.Ref,
+                                Desc = skill.Desc,
+                                Effect = skill.Effect,
+                                Cost = skill.Cost
+                            };
+
+                            // Kiểm tra xem skill đã tồn tại chưa
+                            if (!character.Skills.Any(s => s.Ref == newSkill.Ref))
+                            {
+                                character.Skills.Add(newSkill);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Skill with ref '{skillRef.Ref}' not found in skill.json for character '{character.Name}'.");
+                        }
+                    }
+                }
+
                 await _context.SaveChangesAsync();
 
                 existingNames = await _context.Characters
@@ -467,19 +520,37 @@ namespace Server.Services
                     existing.Desc = character.Desc;
                     existing.Faction = character.Faction;
                     existing.Cultivation = character.Cultivation ?? "Nhập môn";
-                    existing.UserId = character.UserId != 0 ? character.UserId : 0;  // Gán giá trị mặc định nếu UserId không được cung cấp
+                    existing.UserId = character.UserId != 0 ? character.UserId : 0;
+
                     // Xóa các kỹ năng cũ
                     _context.Skills.RemoveRange(existing.Skills);
 
                     // Thêm các kỹ năng mới
-                    existing.Skills = character.Skills?.Select(s => new Skill
+                    existing.Skills = new List<Skill>();
+                    if (character.Skills != null)
                     {
-                        Id = 0,
-                        Name = s.Name,
-                        Ref = s.Ref,
-                        Desc = s.Desc,
-                        Effect = s.Effect
-                    }).ToList() ?? new List<Skill>();
+                        foreach (var skillRef in character.Skills)
+                        {
+                            var skill = skillData.FirstOrDefault(s => s.Ref == skillRef.Ref);
+                            if (skill != null)
+                            {
+                                var newSkill = new Skill
+                                {
+                                    CharacterId = existing.Id,
+                                    Name = skill.Name,
+                                    Ref = skill.Ref,
+                                    Desc = skill.Desc,
+                                    Effect = skill.Effect,
+                                    Cost = skill.Cost
+                                };
+                                existing.Skills.Add(newSkill);
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Skill with ref '{skillRef.Ref}' not found in skill.json for character '{character.Name}'.");
+                            }
+                        }
+                    }
                 }
             }
 

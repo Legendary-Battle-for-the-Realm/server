@@ -90,6 +90,26 @@ namespace Server.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Rooms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MaxPlayers = table.Column<int>(type: "int", nullable: false),
+                    IsGameStarted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CurrentTurnPlayerId = table.Column<int>(type: "int", nullable: false),
+                    TurnOrder = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rooms", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -225,6 +245,65 @@ namespace Server.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "Players",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RoomId = table.Column<int>(type: "int", nullable: false),
+                    HP = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Players", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Players_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "CardLocations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CardId = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<int>(type: "int", nullable: true),
+                    PlayerId = table.Column<int>(type: "int", nullable: true),
+                    LocationType = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CardLocations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CardLocations_Cards_CardId",
+                        column: x => x.CardId,
+                        principalTable: "Cards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CardLocations_Players_PlayerId",
+                        column: x => x.PlayerId,
+                        principalTable: "Players",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_CardLocations_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Armors_SkillId",
                 table: "Armors",
@@ -232,9 +311,29 @@ namespace Server.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CardLocations_CardId",
+                table: "CardLocations",
+                column: "CardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CardLocations_PlayerId",
+                table: "CardLocations",
+                column: "PlayerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CardLocations_RoomId",
+                table: "CardLocations",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cards_EffectId",
                 table: "Cards",
                 column: "EffectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Players_RoomId",
+                table: "Players",
+                column: "RoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Skills_CharacterId",
@@ -255,7 +354,7 @@ namespace Server.Migrations
                 name: "Armors");
 
             migrationBuilder.DropTable(
-                name: "Cards");
+                name: "CardLocations");
 
             migrationBuilder.DropTable(
                 name: "Cultivations");
@@ -270,13 +369,22 @@ namespace Server.Migrations
                 name: "Weapons");
 
             migrationBuilder.DropTable(
-                name: "Effects");
+                name: "Cards");
+
+            migrationBuilder.DropTable(
+                name: "Players");
 
             migrationBuilder.DropTable(
                 name: "Characters");
 
             migrationBuilder.DropTable(
                 name: "EquipmentSkills");
+
+            migrationBuilder.DropTable(
+                name: "Effects");
+
+            migrationBuilder.DropTable(
+                name: "Rooms");
         }
     }
 }

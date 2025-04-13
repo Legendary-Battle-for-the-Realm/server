@@ -51,7 +51,7 @@ namespace Server.Services
                 Id = userId,
                 Name = user.Username,
                 RoomId = roomId,
-                HP = user.HealthPoints
+                HP = user.HealthPoints ?? 100
             };
             room.Players.Add(player);
             await _context.SaveChangesAsync();

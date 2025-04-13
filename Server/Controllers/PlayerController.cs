@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using GameServer.Services;
-using Shared.Models;
+using Server.Services;
 
-namespace GameServer.Controllers
+namespace Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,9 +15,9 @@ namespace GameServer.Controllers
         }
 
         [HttpPost("join-room")]
-        public IActionResult JoinRoom([FromBody] JoinRoomRequest request)
+        public async Task<IActionResult> JoinRoom([FromBody] JoinRoomRequest request)
         {
-            var result = _roomService.JoinRoom(request.RoomId, request.PlayerId);
+            var result = await _roomService.JoinRoomAsync(request.RoomId, request.PlayerId);
             if (result)
             {
                 return Ok("Joined room successfully.");

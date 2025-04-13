@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models;
 using Server.Data;
@@ -5,16 +6,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Shared.Enums;
+using Server.Hubs;
 
 namespace Server.Services
 {
     public class GameService
     {
         private readonly AppDbContext _context;
+        private readonly IHubContext<GameHub> _hubContext;
 
-        public GameService(AppDbContext context)
+        public GameService(AppDbContext context, IHubContext<GameHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
         public async Task<bool> StartGameAsync(int roomId)
@@ -28,45 +33,93 @@ namespace Server.Services
                 return false;
             }
 
-            // Xáo trộn bộ bài
-            var cards = await _context.Cards.ToListAsync();
-            room.Deck = cards.OrderBy(x => Guid.NewGuid()).ToList();
+            // Xóa các CardLocation cũ liên quan đến Room (nếu có)
+            var existingLocations = await _context.CardLocations
+                .Where(cl => cl.RoomId == roomId || cl.PlayerId.HasValue && room.Players.Select(p => p.Id).Contains(cl.PlayerId.Value))
+                .ToListAsync();
+            _context.CardLocations.RemoveRange(existingLocations);
 
-            // Xác định lượt chơi (Turn Order Phase)
-            var turnOrder = new List<int>();
+            // Lấy tất cả thẻ bài từ cơ sở dữ liệu
+            var cards = await _context.Cards.ToListAsync();
+            if (cards == null || cards.Count < room.Players.Count * 5)
+            {
+                return false;
+            }
+
+            // Xáo bài (Setup Phase)
+            var shuffledCards = cards.OrderBy(x => Guid.NewGuid()).ToList();
+
+            // Thêm các thẻ vào Deck của Room
+            foreach (var card in shuffledCards)
+            {
+                var cardLocation = new CardLocation
+                {
+                    CardId = card.Id,
+                    RoomId = room.Id,
+                    PlayerId = null,
+                    LocationType = "Deck"
+                };
+                _context.CardLocations.Add(cardLocation);
+            }
+
+            // Turn Order Phase: Mỗi người chơi bốc 1 lá bài để xác định thứ tự lượt
+            var playerOrder = new List<(int PlayerId, int CardValue)>();
+            var deckCards = await _context.CardLocations
+                .Where(cl => cl.RoomId == roomId && cl.LocationType == "Deck")
+                .Include(cl => cl.Card)
+                .ToListAsync();
+
             foreach (var player in room.Players)
             {
-                var card = room.Deck.First();
-                room.Deck.RemoveAt(0);
-                turnOrder.Add(player.Id);
+                if (deckCards.Any())
+                {
+                    var cardLocation = deckCards.First();
+                    cardLocation.RoomId = room.Id;
+                    cardLocation.PlayerId = null;
+                    cardLocation.LocationType = "DiscardPile";
+                    playerOrder.Add((player.Id, cardLocation.Card.Quantity)); // Sửa ở đây: bỏ ?? 0
+                    deckCards.RemoveAt(0);
+                }
             }
+
+            // Sắp xếp người chơi theo giá trị lá bài (giảm dần)
+            var turnOrder = playerOrder.OrderByDescending(p => p.CardValue).Select(p => p.PlayerId).ToList();
             room.TurnOrder = turnOrder;
             room.CurrentTurnPlayerId = turnOrder.First();
-            room.IsGameStarted = true;
 
-            // Chia bài ban đầu (Setup Phase)
+            // Chia bài: mỗi người chơi nhận 5 lá (Setup Phase)
+            deckCards = await _context.CardLocations
+                .Where(cl => cl.RoomId == roomId && cl.LocationType == "Deck")
+                .Include(cl => cl.Card)
+                .ToListAsync();
+
             foreach (var player in room.Players)
             {
-                for (int i = 0; i < 5; i++) // Chia 5 lá bài ban đầu
+                for (int i = 0; i < 5; i++)
                 {
-                    if (room.Deck.Any())
+                    if (deckCards.Any())
                     {
-                        var card = room.Deck.First();
-                        player.Hand.Add(card);
-                        room.Deck.RemoveAt(0);
+                        var cardLocation = deckCards.First();
+                        cardLocation.RoomId = null;
+                        cardLocation.PlayerId = player.Id;
+                        cardLocation.LocationType = "Hand";
+                        deckCards.RemoveAt(0);
                     }
                 }
             }
 
+            room.IsGameStarted = true;
             await _context.SaveChangesAsync();
+
+            await _hubContext.Clients.Group(roomId.ToString())
+                .SendAsync("GameStarted", $"Game in room {roomId} has started!");
             return true;
         }
 
-        public async Task<Card> DrawCardAsync(int roomId, int playerId)
+        public async Task<Card?> DrawCardAsync(int roomId, int playerId)
         {
             var room = await _context.Rooms
                 .Include(r => r.Players)
-                .Include(r => r.Deck)
                 .FirstOrDefaultAsync(r => r.Id == roomId);
 
             if (room == null || !room.IsGameStarted || room.CurrentTurnPlayerId != playerId)
@@ -80,22 +133,60 @@ namespace Server.Services
                 return null;
             }
 
-            if (!room.Deck.Any())
+            // Lấy danh sách Deck
+            var deckCards = await _context.CardLocations
+                .Where(cl => cl.RoomId == roomId && cl.LocationType == "Deck")
+                .Include(cl => cl.Card)
+                .ToListAsync();
+
+            // Nếu hết bài, xáo lại từ DiscardPile
+            if (!deckCards.Any())
             {
-                return null; // Hết bài để bốc
+                var discardCards = await _context.CardLocations
+                    .Where(cl => cl.RoomId == roomId && cl.LocationType == "DiscardPile")
+                    .Include(cl => cl.Card)
+                    .ToListAsync();
+
+                if (!discardCards.Any())
+                {
+                    return null;
+                }
+
+                foreach (var cardLocation in discardCards)
+                {
+                    cardLocation.LocationType = "Deck";
+                }
+                deckCards = discardCards;
             }
 
-            var card = room.Deck.First();
-            player.Hand.Add(card);
-            room.Deck.RemoveAt(0);
+            var cardLocationToDraw = deckCards.FirstOrDefault();
+            if (cardLocationToDraw == null)
+            {
+                return null;
+            }
 
-            // Chuyển lượt cho người chơi tiếp theo
+            cardLocationToDraw.RoomId = null;
+            cardLocationToDraw.PlayerId = playerId;
+            cardLocationToDraw.LocationType = "Hand";
+
             var currentIndex = room.TurnOrder.IndexOf(playerId);
             var nextIndex = (currentIndex + 1) % room.TurnOrder.Count;
             room.CurrentTurnPlayerId = room.TurnOrder[nextIndex];
 
             await _context.SaveChangesAsync();
-            return card;
+
+            await _hubContext.Clients.Group(roomId.ToString())
+                .SendAsync("ReceiveGameUpdate", $"Player {playerId} drew a card.");
+
+            await ApplyRandomEventAsync(roomId);
+            var winner = await CheckWinConditionAsync(roomId);
+            if (winner != null)
+            {
+                await _hubContext.Clients.Group(roomId.ToString())
+                    .SendAsync("GameEnded", $"Player {winner.Id} wins!");
+            }
+
+            return cardLocationToDraw.Card;
         }
 
         public async Task<bool> UseCardAsync(int roomId, int playerId, int cardId)
@@ -115,34 +206,169 @@ namespace Server.Services
                 return false;
             }
 
-            var card = player.Hand.FirstOrDefault(c => c.Id == cardId);
-            if (card == null)
+            var cardLocation = await _context.CardLocations
+                .Where(cl => cl.PlayerId == playerId && cl.LocationType == "Hand" && cl.CardId == cardId)
+                .Include(cl => cl.Card)
+                .FirstOrDefaultAsync();
+
+            if (cardLocation == null)
             {
                 return false;
             }
 
-            // Xử lý logic sử dụng bài (ví dụ: tấn công, phòng thủ)
-            // Giả sử đây là bài tấn công
-            if (card.Type == 1) // Type 1: Attack
+            var card = cardLocation.Card;
+            if (card.Type == CardType.Action)
             {
-                // Tấn công người chơi tiếp theo
                 var nextPlayerId = room.TurnOrder[(room.TurnOrder.IndexOf(playerId) + 1) % room.TurnOrder.Count];
                 var nextPlayer = room.Players.FirstOrDefault(p => p.Id == nextPlayerId);
                 if (nextPlayer != null)
                 {
-                    nextPlayer.HP -= 10; // Giả sử gây 10 sát thương
+                    nextPlayer.HP -= 10;
+                    await _hubContext.Clients.Group(roomId.ToString())
+                        .SendAsync("ReceiveGameUpdate", $"Player {playerId} used an Action card on Player {nextPlayerId}, dealing 10 damage.");
                 }
             }
+            else if (card.Type == CardType.Consumable)
+            {
+                player.HP += 20;
+                await _hubContext.Clients.Group(roomId.ToString())
+                    .SendAsync("ReceiveGameUpdate", $"Player {playerId} used a Consumable card, restoring 20 HP.");
+            }
 
-            player.Hand.Remove(card);
+            cardLocation.PlayerId = null;
+            cardLocation.RoomId = room.Id;
+            cardLocation.LocationType = "DiscardPile";
 
-            // Chuyển lượt
             var currentIndex = room.TurnOrder.IndexOf(playerId);
             var nextIndex = (currentIndex + 1) % room.TurnOrder.Count;
             room.CurrentTurnPlayerId = room.TurnOrder[nextIndex];
 
             await _context.SaveChangesAsync();
+
+            await _hubContext.Clients.Group(roomId.ToString())
+                .SendAsync("ReceiveGameUpdate", $"Player {playerId} used card {cardId}.");
+
+            await ApplyRandomEventAsync(roomId);
+            var winner = await CheckWinConditionAsync(roomId);
+            if (winner != null)
+            {
+                await _hubContext.Clients.Group(roomId.ToString())
+                    .SendAsync("GameEnded", $"Player {winner.Id} wins!");
+            }
+
             return true;
+        }
+
+        public async Task<bool> PassTurnAsync(int roomId, int playerId)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.Players)
+                .FirstOrDefaultAsync(r => r.Id == roomId);
+
+            if (room == null || !room.IsGameStarted || room.CurrentTurnPlayerId != playerId)
+            {
+                return false;
+            }
+
+            var currentIndex = room.TurnOrder.IndexOf(playerId);
+            var nextIndex = (currentIndex + 1) % room.TurnOrder.Count;
+            room.CurrentTurnPlayerId = room.TurnOrder[nextIndex];
+
+            await _context.SaveChangesAsync();
+
+            await _hubContext.Clients.Group(roomId.ToString())
+                .SendAsync("ReceiveGameUpdate", $"Player {playerId} passed their turn.");
+
+            await ApplyRandomEventAsync(roomId);
+            var winner = await CheckWinConditionAsync(roomId);
+            if (winner != null)
+            {
+                await _hubContext.Clients.Group(roomId.ToString())
+                    .SendAsync("GameEnded", $"Player {winner.Id} wins!");
+            }
+
+            return true;
+        }
+
+        public async Task ApplyRandomEventAsync(int roomId)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.Players)
+                .FirstOrDefaultAsync(r => r.Id == roomId);
+
+            if (room == null || !room.IsGameStarted)
+            {
+                return;
+            }
+
+            var random = new Random();
+            var eventType = random.Next(1, 4);
+            string eventMessage = "";
+            switch (eventType)
+            {
+                case 1:
+                    foreach (var player in room.Players)
+                    {
+                        player.HP -= 20;
+                    }
+                    eventMessage = "A dragon attacks! All players lose 20 HP.";
+                    break;
+                case 2:
+                    foreach (var player in room.Players)
+                    {
+                        player.HP -= 10;
+                    }
+                    eventMessage = "An earthquake strikes! All players lose 10 HP.";
+                    break;
+                default:
+                    eventMessage = "Nothing happens this turn.";
+                    break;
+            }
+
+            await _context.SaveChangesAsync();
+
+            await _hubContext.Clients.Group(roomId.ToString())
+                .SendAsync("ReceiveGameUpdate", eventMessage);
+        }
+
+        public async Task<Player?> CheckWinConditionAsync(int roomId)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.Players)
+                .FirstOrDefaultAsync(r => r.Id == roomId);
+
+            if (room == null || !room.IsGameStarted)
+            {
+                return null;
+            }
+
+            var eliminatedPlayers = room.Players.Where(p => p.HP <= 0).ToList();
+            foreach (var player in eliminatedPlayers)
+            {
+                room.TurnOrder.Remove(player.Id);
+                room.Players.Remove(player);
+                await _hubContext.Clients.Group(roomId.ToString())
+                    .SendAsync("ReceiveGameUpdate", $"Player {player.Id} has been eliminated!");
+            }
+
+            var alivePlayers = room.Players.Where(p => p.HP > 0).ToList();
+            if (alivePlayers.Count == 1)
+            {
+                room.IsGameStarted = false;
+                await _context.SaveChangesAsync();
+                return alivePlayers.First();
+            }
+            else if (alivePlayers.Count == 0)
+            {
+                room.IsGameStarted = false;
+                await _context.SaveChangesAsync();
+                await _hubContext.Clients.Group(roomId.ToString())
+                    .SendAsync("GameEnded", "Game ends in a draw!");
+                return null;
+            }
+
+            await _context.SaveChangesAsync();
+            return null;
         }
     }
 }

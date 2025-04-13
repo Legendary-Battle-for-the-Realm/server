@@ -5,17 +5,18 @@ using Server.Data;
 using Server.Services;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Server.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddControllers();
-
+builder.Services.AddSignalR();
 builder.Services.AddLogging(logging =>
 {
     logging.ClearProviders();
-    logging.AddConsole(); // Hiển thị log trên console
-    logging.AddDebug();   // Hiển thị log trong debug output (nếu dùng IDE như Visual Studio)
+    logging.AddConsole();
+    logging.AddDebug();
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -23,14 +24,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"),
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     )
-    .EnableSensitiveDataLogging() // Bật ghi log dữ liệu nhạy cảm
-    .EnableDetailedErrors()   // Bật thông tin lỗi chi tiết
+    .EnableSensitiveDataLogging()
+    .EnableDetailedErrors()
 );
 builder.Services.AddScoped<CharacterService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddSingleton<MatchService>();
 builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<RoomService>();
+
 // Configure JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var jwtKey = jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Key is missing");
@@ -45,7 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)) // Sửa từ issuerSigningKey thành IssuerSigningKey
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
     });
 
@@ -54,7 +56,6 @@ builder.Services.AddAuthorization();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-    // Thêm hỗ trợ Bearer token
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -82,7 +83,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<DataSyncService>(sp =>
     new DataSyncService(
         sp.GetRequiredService<AppDbContext>(),
-        Path.Combine(Directory.GetCurrentDirectory(), "Json") // Đường dẫn đến thư mục chứa file JSON
+        Path.Combine(Directory.GetCurrentDirectory(), "Json")
     ));
 
 builder.Services.AddScoped<CardSyncService>(provider =>
@@ -92,12 +93,16 @@ builder.Services.AddScoped<CardSyncService>(provider =>
     ));
 
 var app = builder.Build();
-app.UseSwagger(); // Kích hoạt Swagger
-app.UseSwaggerUI(); // Kích hoạt giao diện Swagger UI
-// Configure the HTTP request pipeline
+app.UseSwagger();
+app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
+app.MapHub<GameHub>("/gameHub"); 
 app.Run();

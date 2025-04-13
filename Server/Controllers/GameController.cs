@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using GameServer.Services;
+using Server.Services;
 using Shared.Models;
 
-namespace GameServer.Controllers
+namespace Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,9 +16,9 @@ namespace GameServer.Controllers
         }
 
         [HttpPost("start")]
-        public IActionResult StartGame([FromBody] int roomId)
+        public async Task<IActionResult> StartGame([FromBody] int roomId)
         {
-            var result = _gameService.StartGame(roomId);
+            var result = await _gameService.StartGameAsync(roomId);
             if (result)
             {
                 return Ok("Game started successfully.");
@@ -27,9 +27,9 @@ namespace GameServer.Controllers
         }
 
         [HttpPost("draw-card")]
-        public IActionResult DrawCard([FromBody] DrawCardRequest request)
+        public async Task<IActionResult> DrawCard([FromBody] DrawCardRequest request)
         {
-            var card = _gameService.DrawCard(request.RoomId, request.PlayerId);
+            var card = await _gameService.DrawCardAsync(request.RoomId, request.PlayerId);
             if (card != null)
             {
                 return Ok(card);
@@ -38,14 +38,36 @@ namespace GameServer.Controllers
         }
 
         [HttpPost("use-card")]
-        public IActionResult UseCard([FromBody] UseCardRequest request)
+        public async Task<IActionResult> UseCard([FromBody] UseCardRequest request)
         {
-            var result = _gameService.UseCard(request.RoomId, request.PlayerId, request.CardId);
+            var result = await _gameService.UseCardAsync(request.RoomId, request.PlayerId, request.CardId);
             if (result)
             {
                 return Ok("Card used successfully.");
             }
             return BadRequest("Failed to use card.");
+        }
+
+        [HttpPost("pass-turn")]
+        public async Task<IActionResult> PassTurn([FromBody] PassTurnRequest request)
+        {
+            var result = await _gameService.PassTurnAsync(request.RoomId, request.PlayerId);
+            if (result)
+            {
+                return Ok("Turn passed successfully.");
+            }
+            return BadRequest("Failed to pass turn.");
+        }
+
+        [HttpPost("check-win")]
+        public async Task<IActionResult> CheckWinCondition([FromBody] int roomId)
+        {
+            var winner = await _gameService.CheckWinConditionAsync(roomId);
+            if (winner != null)
+            {
+                return Ok(new { WinnerId = winner.Id, WinnerName = winner.Name });
+            }
+            return Ok("Game continues.");
         }
     }
 
@@ -60,5 +82,11 @@ namespace GameServer.Controllers
         public int RoomId { get; set; }
         public int PlayerId { get; set; }
         public int CardId { get; set; }
+    }
+
+    public class PassTurnRequest
+    {
+        public int RoomId { get; set; }
+        public int PlayerId { get; set; }
     }
 }

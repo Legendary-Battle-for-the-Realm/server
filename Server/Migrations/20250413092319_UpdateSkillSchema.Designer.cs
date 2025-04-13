@@ -11,8 +11,8 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250411074515_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250413092319_UpdateSkillSchema")]
+    partial class UpdateSkillSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,8 +79,7 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("Quantity")
-                        .IsRequired()
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("Ref")
@@ -95,6 +94,36 @@ namespace Server.Migrations
                     b.HasIndex("EffectId");
 
                     b.ToTable("Cards");
+                });
+
+            modelBuilder.Entity("Shared.Models.CardLocation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LocationType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RoomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CardId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("CardLocations");
                 });
 
             modelBuilder.Entity("Shared.Models.Character", b =>
@@ -190,6 +219,57 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EquipmentSkills");
+                });
+
+            modelBuilder.Entity("Shared.Models.Player", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("HP")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("Players");
+                });
+
+            modelBuilder.Entity("Shared.Models.Room", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrentTurnPlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsGameStarted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("MaxPlayers")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TurnOrder")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("Shared.Models.Skill", b =>
@@ -307,13 +387,51 @@ namespace Server.Migrations
                     b.Navigation("Effect");
                 });
 
+            modelBuilder.Entity("Shared.Models.CardLocation", b =>
+                {
+                    b.HasOne("Shared.Models.Card", "Card")
+                        .WithMany()
+                        .HasForeignKey("CardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shared.Models.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Shared.Models.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Card");
+
+                    b.Navigation("Player");
+
+                    b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("Shared.Models.Player", b =>
+                {
+                    b.HasOne("Shared.Models.Room", "Room")
+                        .WithMany("Players")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+                });
+
             modelBuilder.Entity("Shared.Models.Skill", b =>
                 {
-                    b.HasOne("Shared.Models.Character", null)
+                    b.HasOne("Shared.Models.Character", "Character")
                         .WithMany("Skills")
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Character");
                 });
 
             modelBuilder.Entity("Shared.Models.Weapon", b =>
@@ -330,6 +448,11 @@ namespace Server.Migrations
             modelBuilder.Entity("Shared.Models.Character", b =>
                 {
                     b.Navigation("Skills");
+                });
+
+            modelBuilder.Entity("Shared.Models.Room", b =>
+                {
+                    b.Navigation("Players");
                 });
 #pragma warning restore 612, 618
         }
