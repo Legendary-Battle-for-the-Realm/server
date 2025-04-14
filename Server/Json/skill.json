@@ -4,104 +4,119 @@
       "name": "Thái Cực Kiếm",
       "ref": "vo_dang_sword",
       "desc": "Tập trung nội lực tạo ra những đường kiếm uyển chuyển, vừa tấn công mạnh mẽ vừa làm chậm tốc độ di chuyển của đối thủ.",
-      "effect": "Tăng sát thương, có cơ hội choáng tạm thời đối thủ."
+      "effect": "Tăng sát thương, có cơ hội choáng tạm thời đối thủ.",
+      "cost": 50 
     },
     {
       "id": 2,
       "name": "Vô Ảnh Kiếm",
       "ref": "vo_dang_shadow_sword",
       "desc": "Tập trung vào tốc độ và độ ẩn mình, cho phép tấn công bất ngờ và sau đó biến mất khỏi tầm nhìn của đối thủ.",
-      "effect": "Tấn công khó đỡ, gây ra 100% sát thương nếu bên kia dùng 'Ngự' vẫn phải nhận 50% sát thương."
+      "effect": "Tấn công khó đỡ, gây ra 100% sát thương nếu bên kia dùng 'Ngự' vẫn phải nhận 50% sát thương.",
+      "cost": 50 
     },
     {
       "id": 3,
       "name": "La Hán Chưởng",
       "ref": "shao_lin_palm",
       "desc": "Đòn chưởng mạnh mẽ, truyền đạt nội lực, giúp phá vỡ phòng thủ của đối thủ.",
-      "effect": "Tăng sát thương vật lý, phá vỡ phòng thủ, đồng thời có khả năng hồi phục nội lực khi đánh trúng mục tiêu."
+      "effect": "Tăng sát thương vật lý, phá vỡ phòng thủ, đồng thời có khả năng hồi phục nội lực khi đánh trúng mục tiêu.",
+      "cost": 50 
     },
     {
       "id": 4,
       "name": "Kim Cang Chưởng",
       "ref": "shao_lin_kim_cang",
       "desc": "Sử dụng sức mạnh Phật pháp để chuyển hóa nội lực thành những cú đấm mạnh mẽ và có khả năng làm choáng kẻ địch.",
-      "effect": "Gây sát thương vật lý và tự bảo vệ sau đòn đánh."
+      "effect": "Gây sát thương vật lý và tự bảo vệ sau đòn đánh.",
+      "cost": 50 
     },
     {
       "id": 5,
       "name": "Phật Quang Kiếm Pháp",
       "ref": "nga_mi_sword",
       "desc": "Kết hợp kiếm pháp với nội lực tâm linh, tỏa ra ánh sáng chói lòa làm đối thủ mất tập trung.",
-      "effect": "Tăng sát thương theo nội lực, giảm khả năng phòng thủ của đối thủ."
+      "effect": "Tăng sát thương theo nội lực, giảm khả năng phòng thủ của đối thủ.",
+      "cost": 50 
     },
     {
       "id": 6,
       "name": "Từ Hàng Chưởng",
       "ref": "nga_mi_palm",
       "desc": "Đòn chưởng hỗ trợ không chỉ tấn công đối thủ mà còn gia tăng nội lực, giúp đồng đội hồi phục HP hoặc tăng phòng thủ.",
-      "effect": "Gây sát thương vừa phải, tăng chỉ số phòng thủ hoặc hồi phục HP cho đồng đội, kích hoạt hiệu ứng 'hỗ trợ nội lực'."
+      "effect": "Gây sát thương vừa phải, tăng chỉ số phòng thủ hoặc hồi phục HP cho đồng đội, kích hoạt hiệu ứng 'hỗ trợ nội lực'.",
+      "cost": 50 
     },
     {
       "id": 7,
       "name": "Đả Cẩu Bổng Pháp",
       "ref": "cai_bang_stick",
       "desc": "Sử dụng gậy chiến một cách linh hoạt để tạo ra đòn tấn công mạnh mẽ, bất ngờ phá vỡ phòng thủ của kẻ địch.",
-      "effect": "Gây sát thương lớn, tăng khả năng đỡ đòn và giảm sát thương nhận vào lượt sau."
+      "effect": "Gây sát thương lớn, tăng khả năng đỡ đòn và giảm sát thương nhận vào lượt sau.",
+      "cost": 50 
     },
     {
       "id": 8,
       "name": "Giáng Long Thập Bát Chưởng",
       "ref": "cai_bang_palm",
       "desc": "Kỹ năng tổng hợp, kết hợp nhiều đòn chưởng thành chuỗi liên hoàn, tạo nên cơn bão tấn công không thể ngăn cản.",
-      "effect": "Gây sát thương liên tục cho mục tiêu chính và xung quanh, có khả năng làm choáng."
+      "effect": "Gây sát thương liên tục cho mục tiêu chính và xung quanh, có khả năng làm choáng.",
+      "cost": 50 
     },
     {
       "id": 9,
       "name": "Ám Khí Liên Hoàn",
       "ref": "duong_mon_hidden",
       "desc": "Tạo ra loạt đòn tấn công ẩn nấp dưới lớp khí ảo, khiến đối thủ khó phát hiện và phòng thủ.",
-      "effect": "Gây sát thương theo vũ khí mà nhân vật đang mang, giảm khả năng phòng thủ của kẻ địch."
+      "effect": "Gây sát thương theo vũ khí mà nhân vật đang mang, giảm khả năng phòng thủ của kẻ địch.",
+      "cost": 50 
     },
     {
       "id": 10,
       "name": "Thiên La Địa Võng",
       "ref": "duong_mon_net",
       "desc": "Tạo ra vùng tác động mạnh mẽ, thu hút và làm chậm di chuyển của kẻ địch bằng sức mạnh của thiên nhiên.",
-      "effect": "Hạn chế hành động của kẻ địch trúng chiêu (khóa kỹ năng trong 1 lượt)."
+      "effect": "Hạn chế hành động của kẻ địch trúng chiêu (khóa kỹ năng trong 1 lượt).",
+      "cost": 50 
     },
     {
       "id": 11,
       "name": "Huyễn Ảnh Kiếm",
       "ref": "wander_sword",
       "desc": "Tạo ra ảo ảnh để đánh lừa đối thủ, giúp Lý Kỳ tấn công bất ngờ với sát thương cao.",
-      "effect": "Sát thương cao, có tỉ lệ gây thêm 150% sát thương."
+      "effect": "Sát thương cao, có tỉ lệ gây thêm 150% sát thương.",
+      "cost": 50 
     },
     {
       "id": 12,
       "name": "Vô Ảnh Chỉ",
       "ref": "wander_finger",
       "desc": "Sử dụng những ngón tay nhanh nhẹn như vũ khí vô hình, gây sát thương tích lũy qua các đòn liên tiếp.",
-      "effect": "Nếu tấn công thành công sẽ giảm 1 bậc tu vi của kẻ địch và gây sát thương bằng 100% attack, nếu đối phương dùng ngự sẽ giảm 20% qi hiện có và gây sát thương bằng 60% attack."
+      "effect": "Nếu tấn công thành công sẽ giảm 1 bậc tu vi của kẻ địch và gây sát thương bằng 100% attack, nếu đối phương dùng ngự sẽ giảm 20% qi hiện có và gây sát thương bằng 60% attack.",
+      "cost": 50 
     },
     {
       "id": 13,
       "name": "Tử Hà Kiếm",
       "ref": "wander_purple_sword",
       "desc": "Đòn tấn công với độ chính xác và sức mạnh bất ngờ, giúp Linh Nhi vượt qua hàng phòng thủ của đối thủ.",
-      "effect": "Gây sát thương lớn, kích hoạt hiệu ứng 'Phá vỡ phòng thủ' trong 1 lượt."
+      "effect": "Gây sát thương lớn, kích hoạt hiệu ứng 'Phá vỡ phòng thủ' trong 1 lượt.",
+      "cost": 50 
     },
     {
       "id": 14,
       "name": "Phong Ảnh Kiếm",
       "ref": "wander_wind_sword",
       "desc": "Kỹ năng tạo ra những đòn đánh liên tục như gió cuốn, giúp Vân Du gây sát thương cho nhiều mục tiêu.",
-      "effect": "Gây sát thương cho mục tiêu chính và mục tiêu phụ, gây hiệu ứng 'Giảm hồi phục' cho các mục tiêu trung chiêu."
+      "effect": "Gây sát thương cho mục tiêu chính và mục tiêu phụ, gây hiệu ứng 'Giảm hồi phục' cho các mục tiêu trung chiêu.",
+      "cost": 50 
     },
     {
       "id": 15,
       "name": "Huyết Ảnh Chỉ",
       "ref": "wander_blood_finger",
       "desc": "Mỗi cú chỉ của Hàn Phong không chỉ gây sát thương vật lý mà còn kích hoạt nội lực đen tối, khiến đối thủ rơi vào trạng thái hỗn loạn.",
-      "effect": "Gây sát thương bạo kích cho mục tiêu bằng 150% sát thương và hồi phục máu cho bản thân bằng 50% sát thương gây ra."
+      "effect": "Gây sát thương bạo kích cho mục tiêu bằng 150% sát thương và hồi phục máu cho bản thân bằng 50% sát thương gây ra.",
+      "cost": 50 
     }
   ]

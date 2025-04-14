@@ -22,16 +22,16 @@ namespace Server.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Desc = table.Column<string>(type: "longtext", nullable: false)
+                    Desc = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Atk = table.Column<int>(type: "int", nullable: false),
                     Faction = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Cultivation = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     HP = table.Column<int>(type: "int", nullable: false),
                     Qi = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    Atk = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -138,12 +138,12 @@ namespace Server.Migrations
                     CharacterId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Ref = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Cost = table.Column<int>(type: "int", nullable: false),
                     Desc = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Effect = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Cost = table.Column<int>(type: "int", nullable: false),
+                    Ref = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -199,10 +199,10 @@ namespace Server.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Desc = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
                     CultivationRequired = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    SkillId = table.Column<int>(type: "int", nullable: false)
+                    SkillId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -228,10 +228,10 @@ namespace Server.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Desc = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true),
                     CultivationRequired = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    SkillId = table.Column<int>(type: "int", nullable: false)
+                    SkillId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -277,7 +277,7 @@ namespace Server.Migrations
                     CardId = table.Column<int>(type: "int", nullable: false),
                     RoomId = table.Column<int>(type: "int", nullable: true),
                     PlayerId = table.Column<int>(type: "int", nullable: true),
-                    LocationType = table.Column<string>(type: "longtext", nullable: false)
+                    LocationType = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -307,8 +307,7 @@ namespace Server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Armors_SkillId",
                 table: "Armors",
-                column: "SkillId",
-                unique: true);
+                column: "SkillId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CardLocations_CardId",
@@ -343,8 +342,7 @@ namespace Server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Weapons_SkillId",
                 table: "Weapons",
-                column: "SkillId",
-                unique: true);
+                column: "SkillId");
         }
 
         /// <inheritdoc />

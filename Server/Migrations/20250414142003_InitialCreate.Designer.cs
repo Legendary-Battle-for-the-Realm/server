@@ -11,8 +11,8 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250413092319_UpdateSkillSchema")]
-    partial class UpdateSkillSchema
+    [Migration("20250414142003_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,16 +48,15 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("SkillId")
+                    b.Property<int?>("SkillId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SkillId")
-                        .IsUnique();
+                    b.HasIndex("SkillId");
 
                     b.ToTable("Armors");
                 });
@@ -106,7 +105,6 @@ namespace Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LocationType")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int?>("PlayerId")
@@ -140,7 +138,6 @@ namespace Server.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Desc")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Faction")
@@ -353,16 +350,15 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("SkillId")
+                    b.Property<int?>("SkillId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SkillId")
-                        .IsUnique();
+                    b.HasIndex("SkillId");
 
                     b.ToTable("Weapons");
                 });
@@ -370,10 +366,9 @@ namespace Server.Migrations
             modelBuilder.Entity("Shared.Models.Armor", b =>
                 {
                     b.HasOne("Shared.Models.EquipmentSkill", "Skill")
-                        .WithOne()
-                        .HasForeignKey("Shared.Models.Armor", "SkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Skill");
                 });
@@ -437,10 +432,9 @@ namespace Server.Migrations
             modelBuilder.Entity("Shared.Models.Weapon", b =>
                 {
                     b.HasOne("Shared.Models.EquipmentSkill", "Skill")
-                        .WithOne()
-                        .HasForeignKey("Shared.Models.Weapon", "SkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Skill");
                 });

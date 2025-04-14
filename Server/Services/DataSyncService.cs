@@ -22,6 +22,9 @@ namespace Server.Services
 
         public async Task SyncAllDataAsync()
         {
+            // Đồng bộ Effects trước (vì Cards tham chiếu đến EffectId)
+            await SyncEffectsAsync();
+
             // Đồng bộ Cultivations trước (vì Armor và Weapon tham chiếu đến CultivationRequired)
             await SyncCultivationsAsync();
 
@@ -36,6 +39,67 @@ namespace Server.Services
 
             // Đồng bộ Characters và Skills
             await SyncCharactersAsync();
+        }
+
+        private async Task SyncEffectsAsync()
+        {
+            var filePath = Path.Combine(_dataPath, "effect.json");
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException($"Không tìm thấy file {filePath}.");
+            }
+
+            var json = await File.ReadAllTextAsync(filePath);
+            var effects = JsonConvert.DeserializeObject<List<Effect>>(json);
+
+            if (effects == null)
+            {
+                throw new InvalidOperationException("Không thể phân tích file effect.json.");
+            }
+
+            var existingRefs = await _context.Effects
+                .AsNoTracking()
+                .Select(e => e.Ref)
+                .ToListAsync();
+
+            var toAdd = new List<Effect>();
+            var toUpdate = new List<Effect>();
+
+            foreach (var effect in effects)
+            {
+                if (existingRefs.Contains(effect.Ref))
+                {
+                    toUpdate.Add(effect);
+                }
+                else
+                {
+                    effect.Id = 0; // Đặt Id = 0 để EF Core tự động tạo Id mới
+                    toAdd.Add(effect);
+                }
+            }
+
+            if (toAdd.Any())
+            {
+                await _context.Effects.AddRangeAsync(toAdd);
+                await _context.SaveChangesAsync();
+            }
+
+            foreach (var effect in toUpdate)
+            {
+                var existing = await _context.Effects
+                    .FirstOrDefaultAsync(e => e.Ref == effect.Ref);
+
+                if (existing != null)
+                {
+                    existing.Name = effect.Name;
+                    existing.Ref = effect.Ref;
+                }
+            }
+
+            if (toUpdate.Any())
+            {
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task SyncCultivationsAsync()
@@ -146,12 +210,6 @@ namespace Server.Services
                     Ref = c.Ref,
                     Type = c.Type,
                     EffectId = c.EffectId,
-                    Effect = c.Effect != null ? new Effect
-                    {
-                        Id = 0,
-                        Name = c.Effect.Name,
-                        Ref = c.Effect.Ref
-                    } : null,
                     Quantity = c.Quantity
                 }).ToList();
 
@@ -178,28 +236,6 @@ namespace Server.Services
                     existing.Type = card.Type;
                     existing.EffectId = card.EffectId;
                     existing.Quantity = card.Quantity;
-
-                    if (card.Effect != null)
-                    {
-                        if (existing.Effect != null)
-                        {
-                            existing.Effect.Name = card.Effect.Name;
-                            existing.Effect.Ref = card.Effect.Ref;
-                        }
-                        else
-                        {
-                            existing.Effect = new Effect
-                            {
-                                Id = 0,
-                                Name = card.Effect.Name,
-                                Ref = card.Effect.Ref
-                            };
-                        }
-                    }
-                    else
-                    {
-                        existing.Effect = null;
-                    }
                 }
             }
 
@@ -211,181 +247,293 @@ namespace Server.Services
 
         private async Task SyncArmorsAsync()
         {
-            var filePath = Path.Combine(_dataPath, "armor.json");
-            if (!File.Exists(filePath))
+            try
             {
-                throw new FileNotFoundException($"Không tìm thấy file {filePath}.");
-            }
-
-            var json = await File.ReadAllTextAsync(filePath);
-            var armors = JsonConvert.DeserializeObject<List<Armor>>(json);
-
-            if (armors == null)
-            {
-                throw new InvalidOperationException("Không thể phân tích file armor.json.");
-            }
-
-            var existingNames = await _context.Armors
-                .AsNoTracking()
-                .Select(a => a.Name)
-                .ToListAsync();
-
-            var toAdd = new List<Armor>();
-            var toUpdate = new List<Armor>();
-
-            foreach (var armor in armors)
-            {
-                if (existingNames.Contains(armor.Name))
+                var filePath = Path.Combine(_dataPath, "armor.json");
+                if (!File.Exists(filePath))
                 {
-                    toUpdate.Add(armor);
+                    throw new FileNotFoundException($"Không tìm thấy file {filePath}.");
                 }
-                else
+
+                var json = await File.ReadAllTextAsync(filePath);
+                Console.WriteLine($"Nội dung file armor.json: {json}");
+
+                var armors = JsonConvert.DeserializeObject<List<Armor>>(json);
+                if (armors == null)
                 {
-                    armor.Id = 0;
-                    toAdd.Add(armor);
+                    throw new InvalidOperationException("Không thể phân tích file armor.json.");
                 }
-            }
 
-            if (toAdd.Any())
-            {
-                var newArmors = toAdd.Select(a => new Armor
+                Console.WriteLine($"Số lượng armors: {armors.Count}");
+                if (!armors.Any())
                 {
-                    Id = 0,
-                    Name = a.Name,
-                    Atk = a.Atk,
-                    Def = a.Def,
-                    Desc = a.Desc,
-                    UserId = a.UserId,
-                    CultivationRequired = a.CultivationRequired ?? "Nhập môn",
-                    Skill = new EquipmentSkill
-                    {
-                        Id = 0,
-                        Name = a.Skill.Name,
-                        Ref = a.Skill.Ref
-                    }
-                }).ToList();
+                    throw new InvalidOperationException("Danh sách armors rỗng sau khi phân tích file armor.json.");
+                }
 
-                await _context.Armors.AddRangeAsync(newArmors);
-                await _context.SaveChangesAsync();
-
-                existingNames = await _context.Armors
+                var existingNames = await _context.Armors
                     .AsNoTracking()
                     .Select(a => a.Name)
                     .ToListAsync();
-            }
 
-            foreach (var armor in toUpdate)
-            {
-                var existing = await _context.Armors
-                    .Include(a => a.Skill)
-                    .FirstOrDefaultAsync(a => a.Name == armor.Name);
+                var toAdd = new List<Armor>();
+                var toUpdate = new List<Armor>();
 
-                if (existing != null)
+                foreach (var armor in armors)
                 {
-                    existing.Name = armor.Name;
-                    existing.Atk = armor.Atk;
-                    existing.Def = armor.Def;
-                    existing.Desc = armor.Desc;
-                    existing.UserId = armor.UserId;
-                    existing.CultivationRequired = armor.CultivationRequired ?? "Nhập môn";
+                    if (existingNames.Contains(armor.Name))
+                    {
+                        toUpdate.Add(armor);
+                    }
+                    else
+                    {
+                        armor.Id = 0;
+                        toAdd.Add(armor);
+                    }
+                }
 
-                    existing.Skill.Name = armor.Skill.Name;
-                    existing.Skill.Ref = armor.Skill.Ref;
+                if (toAdd.Any())
+                {
+                    // Tạo danh sách các EquipmentSkill cần lưu
+                    var skillsToAdd = toAdd
+                        .Where(a => a.Skill != null && !string.IsNullOrEmpty(a.Skill.Ref))
+                        .Select(a => new EquipmentSkill
+                        {
+                            Id = 0,
+                            Name = a.Skill.Name ?? string.Empty,
+                            Ref = a.Skill.Ref
+                        })
+                        .DistinctBy(s => s.Ref)
+                        .ToList();
+
+                    // Lưu các EquipmentSkill vào bảng EquipmentSkills
+                    if (skillsToAdd.Any())
+                    {
+                        await _context.EquipmentSkills.AddRangeAsync(skillsToAdd);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    // Lấy lại danh sách skill vừa lưu để ánh xạ SkillId
+                    var skillDict = await _context.EquipmentSkills
+                        .AsNoTracking()
+                        .ToDictionaryAsync(s => s.Ref, s => s.Id);
+
+                    // Tạo danh sách Armor mới với SkillId hợp lệ
+                    var newArmors = toAdd.Select(a => new Armor
+                    {
+                        Id = 0,
+                        Name = a.Name ?? string.Empty,
+                        Atk = a.Atk,
+                        Def = a.Def,
+                        Desc = a.Desc ?? string.Empty,
+                        UserId = a.UserId,
+                        CultivationRequired = a.CultivationRequired ?? "Nhập môn",
+                        SkillId = a.Skill != null && !string.IsNullOrEmpty(a.Skill.Ref) && skillDict.ContainsKey(a.Skill.Ref)
+                            ? skillDict[a.Skill.Ref]
+                            : null,
+                        Skill = null
+                    }).ToList();
+
+                    await _context.Armors.AddRangeAsync(newArmors);
+                    await _context.SaveChangesAsync();
+
+                    existingNames = await _context.Armors
+                        .AsNoTracking()
+                        .Select(a => a.Name)
+                        .ToListAsync();
+                }
+
+                if (toUpdate.Any())
+                {
+                    foreach (var armor in toUpdate)
+                    {
+                        var existingArmor = await _context.Armors
+                            .FirstOrDefaultAsync(a => a.Name == armor.Name);
+
+                        if (existingArmor != null)
+                        {
+                            existingArmor.Atk = armor.Atk;
+                            existingArmor.Def = armor.Def;
+                            existingArmor.Desc = armor.Desc ?? string.Empty;
+                            existingArmor.UserId = armor.UserId;
+                            existingArmor.CultivationRequired = armor.CultivationRequired ?? "Nhập môn";
+
+                            if (armor.Skill != null && !string.IsNullOrEmpty(armor.Skill.Ref))
+                            {
+                                var skill = await _context.EquipmentSkills
+                                    .FirstOrDefaultAsync(s => s.Ref == armor.Skill.Ref);
+                                if (skill == null)
+                                {
+                                    skill = new EquipmentSkill
+                                    {
+                                        Id = 0,
+                                        Name = armor.Skill.Name ?? string.Empty,
+                                        Ref = armor.Skill.Ref
+                                    };
+                                    _context.EquipmentSkills.Add(skill);
+                                    await _context.SaveChangesAsync();
+                                }
+                                existingArmor.SkillId = skill.Id;
+                            }
+                            else
+                            {
+                                existingArmor.SkillId = null;
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
                 }
             }
-
-            if (toUpdate.Any())
+            catch (Exception ex)
             {
-                await _context.SaveChangesAsync();
+                Console.WriteLine($"Lỗi trong SyncArmorsAsync: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
             }
         }
 
         private async Task SyncWeaponsAsync()
         {
-            var filePath = Path.Combine(_dataPath, "weapon.json");
-            if (!File.Exists(filePath))
+            try
             {
-                throw new FileNotFoundException($"Không tìm thấy file {filePath}.");
-            }
-
-            var json = await File.ReadAllTextAsync(filePath);
-            var weapons = JsonConvert.DeserializeObject<List<Weapon>>(json);
-
-            if (weapons == null)
-            {
-                throw new InvalidOperationException("Không thể phân tích file weapon.json.");
-            }
-
-            var existingNames = await _context.Weapons
-                .AsNoTracking()
-                .Select(w => w.Name)
-                .ToListAsync();
-
-            var toAdd = new List<Weapon>();
-            var toUpdate = new List<Weapon>();
-
-            foreach (var weapon in weapons)
-            {
-                if (existingNames.Contains(weapon.Name))
+                var filePath = Path.Combine(_dataPath, "weapon.json");
+                if (!File.Exists(filePath))
                 {
-                    toUpdate.Add(weapon);
+                    throw new FileNotFoundException($"Không tìm thấy file {filePath}.");
                 }
-                else
+
+                var json = await File.ReadAllTextAsync(filePath);
+                Console.WriteLine($"Nội dung file weapon.json: {json}");
+
+                var weapons = JsonConvert.DeserializeObject<List<Weapon>>(json);
+                if (weapons == null)
                 {
-                    weapon.Id = 0;
-                    toAdd.Add(weapon);
+                    throw new InvalidOperationException("Không thể phân tích file weapon.json.");
                 }
-            }
 
-            if (toAdd.Any())
-            {
-                var newWeapons = toAdd.Select(w => new Weapon
+                Console.WriteLine($"Số lượng weapons: {weapons.Count}");
+                if (!weapons.Any())
                 {
-                    Id = 0,
-                    Name = w.Name,
-                    Atk = w.Atk,
-                    Desc = w.Desc,
-                    UserId = w.UserId,
-                    CultivationRequired = w.CultivationRequired,
-                    Skill = new EquipmentSkill
-                    {
-                        Id = 0,
-                        Name = w.Skill.Name,
-                        Ref = w.Skill.Ref
-                    }
-                }).ToList();
+                    throw new InvalidOperationException("Danh sách weapons rỗng sau khi phân tích file weapon.json.");
+                }
 
-                await _context.Weapons.AddRangeAsync(newWeapons);
-                await _context.SaveChangesAsync();
-
-                existingNames = await _context.Weapons
+                var existingNames = await _context.Weapons
                     .AsNoTracking()
                     .Select(w => w.Name)
                     .ToListAsync();
-            }
 
-            foreach (var weapon in toUpdate)
-            {
-                var existing = await _context.Weapons
-                    .Include(w => w.Skill)
-                    .FirstOrDefaultAsync(w => w.Name == weapon.Name);
+                var toAdd = new List<Weapon>();
+                var toUpdate = new List<Weapon>();
 
-                if (existing != null)
+                foreach (var weapon in weapons)
                 {
-                    existing.Name = weapon.Name;
-                    existing.Atk = weapon.Atk;
-                    existing.Desc = weapon.Desc;
-                    existing.UserId = weapon.UserId;
-                    existing.CultivationRequired = weapon.CultivationRequired;
+                    if (existingNames.Contains(weapon.Name))
+                    {
+                        toUpdate.Add(weapon);
+                    }
+                    else
+                    {
+                        weapon.Id = 0;
+                        toAdd.Add(weapon);
+                    }
+                }
 
-                    existing.Skill.Name = weapon.Skill.Name;
-                    existing.Skill.Ref = weapon.Skill.Ref;
+                if (toAdd.Any())
+                {
+                    // Tạo danh sách các EquipmentSkill cần lưu
+                    var skillsToAdd = toAdd
+                        .Where(w => w.Skill != null && !string.IsNullOrEmpty(w.Skill.Ref)) // Chỉ lấy skill hợp lệ
+                        .Select(w => new EquipmentSkill
+                        {
+                            Id = 0,
+                            Name = w.Skill.Name ?? string.Empty,
+                            Ref = w.Skill.Ref
+                        })
+                        .DistinctBy(s => s.Ref)
+                        .ToList();
+
+                    // Lưu các EquipmentSkill vào bảng EquipmentSkills
+                    if (skillsToAdd.Any())
+                    {
+                        await _context.EquipmentSkills.AddRangeAsync(skillsToAdd);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    // Lấy lại danh sách skill vừa lưu để ánh xạ SkillId
+                    var skillDict = await _context.EquipmentSkills
+                        .AsNoTracking()
+                        .ToDictionaryAsync(s => s.Ref, s => s.Id);
+
+                    // Tạo danh sách Weapon mới với SkillId hợp lệ
+                    var newWeapons = toAdd.Select(w => new Weapon
+                    {
+                        Id = 0,
+                        Name = w.Name ?? string.Empty,
+                        Atk = w.Atk,
+                        Desc = w.Desc ?? string.Empty,
+                        UserId = w.UserId,
+                        CultivationRequired = w.CultivationRequired ?? "Nhập môn",
+                        SkillId = w.Skill != null && !string.IsNullOrEmpty(w.Skill.Ref) && skillDict.ContainsKey(w.Skill.Ref)
+                            ? skillDict[w.Skill.Ref]
+                            : null,
+                        Skill = null
+                    }).ToList();
+
+                    await _context.Weapons.AddRangeAsync(newWeapons);
+                    await _context.SaveChangesAsync();
+
+                    existingNames = await _context.Weapons
+                        .AsNoTracking()
+                        .Select(w => w.Name)
+                        .ToListAsync();
+                }
+
+                if (toUpdate.Any())
+                {
+                    foreach (var weapon in toUpdate)
+                    {
+                        var existingWeapon = await _context.Weapons
+                            .FirstOrDefaultAsync(w => w.Name == weapon.Name);
+
+                        if (existingWeapon != null)
+                        {
+                            existingWeapon.Atk = weapon.Atk;
+                            existingWeapon.Desc = weapon.Desc ?? string.Empty;
+                            existingWeapon.UserId = weapon.UserId;
+                            existingWeapon.CultivationRequired = weapon.CultivationRequired ?? "Nhập môn";
+
+                            if (weapon.Skill != null && !string.IsNullOrEmpty(weapon.Skill.Ref))
+                            {
+                                var skill = await _context.EquipmentSkills
+                                    .FirstOrDefaultAsync(s => s.Ref == weapon.Skill.Ref);
+                                if (skill == null)
+                                {
+                                    skill = new EquipmentSkill
+                                    {
+                                        Id = 0,
+                                        Name = weapon.Skill.Name ?? string.Empty,
+                                        Ref = weapon.Skill.Ref
+                                    };
+                                    _context.EquipmentSkills.Add(skill);
+                                    await _context.SaveChangesAsync();
+                                }
+                                existingWeapon.SkillId = skill.Id;
+                            }
+                            else
+                            {
+                                existingWeapon.SkillId = null;
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
                 }
             }
-
-            if (toUpdate.Any())
+            catch (Exception ex)
             {
-                await _context.SaveChangesAsync();
+                Console.WriteLine($"Lỗi trong SyncWeaponsAsync: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
             }
         }
 

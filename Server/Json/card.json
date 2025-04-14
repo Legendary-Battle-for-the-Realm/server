@@ -1,88 +1,74 @@
 [
     {
-        "id": 0,
-        "name": "Kích",
-        "desc": "Thẻ tấn công cơ bản, gây sát thương trực tiếp lên đối thủ.",
-        "ref": "atk_card",
-        "type": "Action",
-        "quantity": 15
+      "Name": "Kích",
+      "Desc": "Thẻ tấn công cơ bản, gây sát thương trực tiếp lên đối thủ.",
+      "Ref": "atk_card",
+      "Type": "1",
+      "Quantity": 15,
+      "EffectId": null
     },
     {
-        "id": 0,
-        "name": "Ngự",
-        "desc": "Thẻ phòng thủ cơ bản, giảm sát thương nhận vào từ đòn tấn công của đối thủ.",
-        "ref": "def_card",
-        "type": "Action",
-        "quantity": 15
+      "Name": "Ngự",
+      "Desc": "Thẻ phòng thủ cơ bản, giảm sát thương nhận vào từ đòn tấn công của đối thủ.",
+      "Ref": "def_card",
+      "Type": "1",
+      "Quantity": 15,
+      "EffectId": null
     },
     {
-        "id": 0,
-        "name": "Đại Hoàn Đan",
-        "desc": "Đan dược giúp tăng cường sinh lực, hồi phục thương tổn nhanh chóng.",
-        "ref": "great_restore_pill",
-        "type": "Consumable",
-        "effectId": 1,
-        "effect": { "name": "Tăng HP", "ref": "increase_hp" },
-        "quantity": 5
+      "Name": "Đại Hoàn Đan",
+      "Desc": "Đan dược giúp tăng cường sinh lực, hồi phục thương tổn nhanh chóng.",
+      "Ref": "great_restore_pill",
+      "Type": "2",
+      "Quantity": 5,
+      "EffectId": 1
     },
     {
-        "id": 0,
-        "name": "Cường Thể Đan",
-        "desc": "Đan dược giúp rèn luyện cơ thể, gia tăng phòng thủ đáng kể.",
-        "ref": "body_strength_pill",
-        "type": "Consumable",
-        "effectId": 2,
-        "effect": { "name": "Tăng DEF", "ref": "increase_def" },
-        "quantity": 5
+      "Name": "Cường Thể Đan",
+      "Desc": "Đan dược giúp rèn luyện cơ thể, gia tăng phòng thủ đáng kể.",
+      "Ref": "body_strength_pill",
+      "Type": "2",
+      "Quantity": 5,
+      "EffectId": 2
     },
     {
-        "id": 0,
-        "name": "Hổ Gầm Đan",
-        "desc": "Đan dược giúp bộc phát sức mạnh chiến đấu trong thời gian ngắn.",
-        "ref": "tiger_roar_pill",
-        "type": "Consumable",
-        "effectId": 3,
-        "effect": { "name": "Tăng ATK", "ref": "increase_atk" },
-        "quantity": 5
+      "Name": "Hổ Gầm Đan",
+      "Desc": "Đan dược giúp bộc phát sức mạnh chiến đấu trong thời gian ngắn.",
+      "Ref": "tiger_roar_pill",
+      "Type": "2",
+      "Quantity": 5,
+      "EffectId": 3
     },
     {
-        "id": 0,
-        "name": "Linh Khí Đan",
-        "desc": "Đan dược chứa linh khí tinh thuần, giúp người dùng tăng mạnh tu vi.",
-        "ref": "spirit_qi_pill",
-        "type": "Consumable",
-        "effectId": 4,
-        "effect": { "name": "Tăng Tu Vi", "ref": "increase_cultivation" },
-        "quantity": 5
+      "Name": "Linh Khí Đan",
+      "Desc": "Đan dược chứa linh khí tinh thuần, giúp người dùng tăng mạnh tu vi.",
+      "Ref": "spirit_qi_pill",
+      "Type": "2",
+      "Quantity": 5,
+      "EffectId": 4
     },
     {
-        "id": 0,
-        "name": "Đột Phá Đan",
-        "desc": "Đan dược thần bí có thể giúp người dùng đột phá cảnh giới ngay lập tức.",
-        "ref": "breakthrough_pill",
-        "type": "Consumable",
-        "effectId": 5,
-        "effect": { "name": "Đột Phá Cảnh Giới", "ref": "breakthrough_realm" },
-        "quantity": 3
+      "Name": "Đột Phá Đan",
+      "Desc": "Đan dược thần bí có thể giúp người dùng đột phá cảnh giới ngay lập tức.",
+      "Ref": "breakthrough_pill",
+      "Type": "2",
+      "Quantity": 3,
+      "EffectId": 5
     },
     {
-        "id": 0,
-        "name": "Hồi Phục Đan",
-        "desc": "Đan dược giúp hồi phục một phần sinh lực.",
-        "ref": "recovery_pill",
-        "type": "Consumable",
-        "effectId": 6,
-        "effect": { "name": "Hồi phục HP", "ref": "restore_hp" },
-        "quantity": 5
+      "Name": "Hồi Phục Đan",
+      "Desc": "Đan dược giúp hồi phục một phần sinh lực.",
+      "Ref": "recovery_pill",
+      "Type": "2",
+      "Quantity": 5,
+      "EffectId": 6
     },
     {
-        "id": 0,
-        "name": "Thần Thủy Tinh",
-        "desc": "Linh thủy hồi phục năng lượng nội công.",
-        "ref": "divine_water_crystal",
-        "type": "Consumable",
-        "effectId": 7,
-        "effect": { "name": "Hồi phục Qi", "ref": "restore_qi" },
-        "quantity": 5
+      "Name": "Thần Thủy Tinh",
+      "Desc": "Linh thủy hồi phục năng lượng nội công.",
+      "Ref": "divine_water_crystal",
+      "Type": "2",
+      "Quantity": 5,
+      "EffectId": 7
     }
-]
+  ]

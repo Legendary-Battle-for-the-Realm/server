@@ -1,0 +1,37 @@
+[
+    {
+      "Id": 1,
+      "Name": "Hồi phục lớn",
+      "Ref": "RestoreHP:50"
+    },
+    {
+      "Id": 2,
+      "Name": "Tăng phòng thủ",
+      "Ref": "IncreaseDef:20"
+    },
+    {
+      "Id": 3,
+      "Name": "Tăng tấn công",
+      "Ref": "IncreaseAtk:20"
+    },
+    {
+      "Id": 4,
+      "Name": "Tăng linh khí",
+      "Ref": "IncreaseQi:30"
+    },
+    {
+      "Id": 5,
+      "Name": "Đột phá cảnh giới",
+      "Ref": "Breakthrough:1"
+    },
+    {
+      "Id": 6,
+      "Name": "Hồi phục nhỏ",
+      "Ref": "RestoreHP:20"
+    },
+    {
+      "Id": 7,
+      "Name": "Hồi phục nội công",
+      "Ref": "RestoreEnergy:30"
+    }
+  ]

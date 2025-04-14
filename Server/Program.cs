@@ -93,6 +93,15 @@ builder.Services.AddScoped<CardSyncService>(provider =>
     ));
 
 var app = builder.Build();
+
+// đồng bộ dữ liệu khi ứng dụng khởi động
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dataSyncService = services.GetRequiredService<DataSyncService>();
+    await dataSyncService.SyncAllDataAsync();
+}
+
 app.UseSwagger();
 app.UseSwaggerUI();
 if (app.Environment.IsDevelopment())
