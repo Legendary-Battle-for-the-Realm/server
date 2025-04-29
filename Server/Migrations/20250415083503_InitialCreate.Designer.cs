@@ -11,7 +11,7 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250414142003_InitialCreate")]
+    [Migration("20250415083503_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -28,17 +28,15 @@ namespace Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Atk")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Atk")
+                        .HasColumnType("int");
 
                     b.Property<string>("CultivationRequired")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Def")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Def")
+                        .HasColumnType("int");
 
                     b.Property<string>("Desc")
                         .IsRequired()
@@ -334,9 +332,8 @@ namespace Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Atk")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Atk")
+                        .HasColumnType("int");
 
                     b.Property<string>("CultivationRequired")
                         .IsRequired()
